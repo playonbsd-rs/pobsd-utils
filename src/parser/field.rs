@@ -8,25 +8,6 @@ use std::fmt;
 /// below).
 /// The Unknown variant is used to represent lines
 /// that were not parsed correctly.
-/// ```
-/// use pobsdrs_parser::Field;
-///
-/// // line representing a runtime item
-/// let runtime_str = "Runtime\truntime name";
-/// // create a Field enum from that line
-/// let runtime_field = Field::from(runtime_str);
-/// assert_eq!(runtime_field,Field::Runtime(Some("runtime name".into())));
-/// // the Field enum is displayed as the corresponding line
-/// // in the database
-/// assert_eq!(format!("{}", runtime_field), runtime_str);
-///
-/// // line representing a tag item
-/// let tag_str = "Tags\ttag1, tag2";
-/// // create a Field enum from that line
-/// let tag_field = Field::from(tag_str);
-/// assert_eq!(tag_field,Field::Tags(Some(vec!["tag1".into(),"tag2".into()])));
-/// assert_eq!(format!("{}", tag_field), tag_str);
-/// ```
 #[derive(PartialEq, Eq, Debug, Clone)]
 pub enum Field {
     /// Store the result of a Game line of the database

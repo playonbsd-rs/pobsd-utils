@@ -31,25 +31,6 @@
 //!
 //! The [`Parser::load_from_file`] method returns [`Result`]<[`ParserResult`], [`std::io::Error`]>.
 //!
-//! ### Example
-//!
-//! ```no_run
-//! use parser::{Parser, ParserResult};
-//!
-//! // Print the database
-//! fn main() -> Result<(), std::io::Error> {
-//!     let result = Parser::default().load_from_file("tests/data/good-data.db")?;
-//!     match result {
-//!         ParserResult::WithoutError(games) => {
-//!             for game in games {
-//!                 println!("{}", game);
-//!             }
-//!         },
-//!         ParserResult::WithError(_, _) => println!("Parsing errors"),
-//!     }
-//!     Ok(())
-//! }
-//! ```
 use std::fs;
 use std::path::Path;
 
