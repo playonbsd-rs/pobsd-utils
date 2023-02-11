@@ -4,6 +4,7 @@ use crate::parser::{Parser, ParserResult};
 extern crate serde_derive;
 extern crate serde_json;
 pub(crate) mod parser;
+pub(crate) mod db;
 
 pub fn check(file: impl AsRef<Path>) -> Result<(), std::io::Error> {
     let parser = Parser::default();
