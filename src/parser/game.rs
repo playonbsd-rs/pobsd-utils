@@ -1,20 +1,32 @@
+//! # Game
+//! pobsdrs-parser provides a [`Game`] struct representing a
+//! game from the database with an additional [`Game::id`] field which
+//!  represents the position in the database.
+//!
+//! The name of some fields differs from the one used
+//! in the database itself: Genre and Store are plural
+//! since there can be more than one item for each
+//! and Pub translate to publi since pub is a reserved
+//! keyword in Rust.
+//!
+//! All fields are optional strings or vectors of strings
+//! except for the name of the game which is mandatory.
+//! The parser does not try to be smart with dates and
+//! just store them as string.
+//!
+//! ### Display
+//! The [`Game`] struct implement the [`core::fmt::Display`] trait
+//! and will be displayed as it would appear in the
+//! PlayOnBSD database.
+//!
+//! ### PartialOrd
+//! The [`Game`] struct implements the [`core::cmp::PartialOrd`] trait
+//! and [`Game`] objects are ordered according to their
+//! [`Game::id`] which correspond to the game position in
+//! the PlayOnBSD database.
 use std::cmp::{Ordering, PartialOrd};
 use std::fmt;
 
-/// # Represent a game
-/// The Game struct represents a game from the database
-/// with an additional id which represents the position
-/// in the database.
-/// See <https://github.com/playonbsd/OpenBSD-Games-Database>
-/// for details.
-/// The name of some fields differs from the one used
-/// in the database itself: Genre and Store are plural
-/// since there can be more than one item for each
-/// and Pub translate to publi since pub is a reserved
-/// keyword in Rust.
-/// A String type is used for Year since sometimes the
-/// release date can only be described by textw (e.g.
-/// "early acess").
 #[derive(Serialize, Clone, Default, Debug, PartialEq, Eq)]
 pub struct Game {
     /// The id of the game.
