@@ -13,4 +13,3 @@ pub struct GameDb {
     pub added: Option<String>,
     pub updated: Option<String>,
 }
-

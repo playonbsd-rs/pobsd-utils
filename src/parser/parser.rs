@@ -114,7 +114,10 @@ impl Parser {
             let data = fs::read_to_string(file)?;
             Ok(self.load_from_string(&data))
         } else {
-            Err(std::io::Error::new(std::io::ErrorKind::InvalidInput, "This is not a file"))
+            Err(std::io::Error::new(
+                std::io::ErrorKind::InvalidInput,
+                "This is not a file",
+            ))
         }
     }
     pub fn load_from_string(mut self, data: &str) -> ParserResult {
@@ -124,7 +127,7 @@ impl Parser {
             if let ParserState::Error = self.state {
                 self.error_lines.push(self.current_line);
                 if let ParsingMode::Strict = self.mode {
-                    break
+                    break;
                 }
             };
         }

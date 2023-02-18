@@ -87,7 +87,8 @@ impl<'a> Game {
 /// on the name.
 impl PartialOrd for Game {
     fn partial_cmp(&self, other: &Game) -> Option<Ordering> {
-        self.get_ordering_name().partial_cmp(&other.get_ordering_name())
+        self.get_ordering_name()
+            .partial_cmp(&other.get_ordering_name())
     }
     fn lt(&self, other: &Game) -> bool {
         self.get_ordering_name().lt(&other.get_ordering_name())
@@ -234,7 +235,7 @@ mod game_tests {
         game.name = "a champion".into();
         assert_eq!(game.get_ordering_name(), "champion");
     }
-     #[test]
+    #[test]
     fn test_get_ordering_name_with_the() {
         let mut game = create_game();
         game.name = "The champion".into();

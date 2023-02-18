@@ -2,7 +2,6 @@ use clap::{arg, Command};
 
 use pobsd_rs::check;
 
-
 fn cli() -> Command {
     Command::new("pobsdrs-parser")
         .about("A tool to manipulate the PlayOnBSD Database")
@@ -19,13 +18,13 @@ fn cli() -> Command {
 
 fn main() -> Result<(), std::io::Error> {
     let matches = cli().get_matches();
-    
+
     match matches.subcommand() {
         Some(("check", sub_matches)) => {
             let file = sub_matches.get_one::<String>("DATABASE").expect("required");
             check(file)?
         }
-        _ => println!("Unsupported command")
+        _ => println!("Unsupported command"),
     }
     Ok(())
 }

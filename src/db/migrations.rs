@@ -1,5 +1,5 @@
-use rusqlite::{Connection, Result};
 use super::game::GameDb;
+use rusqlite::{Connection, Result};
 
 struct Migrations {}
 
@@ -41,7 +41,7 @@ mod migrations_tests {
         conn.execute(
             "INSERT INTO game (game_id, name) VALUES (?1, ?2)",
             (game.id, &game.name),
-        ).unwrap();
+        )
+        .unwrap();
     }
 }
-

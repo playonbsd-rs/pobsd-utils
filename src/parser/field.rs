@@ -400,11 +400,11 @@ mod field_tests {
     fn test_from_unknown_field() {
         let input = "Let's not\tpanic";
         let field = Field::from(&input);
+        assert_eq!(Field::Unknown(Some("Let's not".into())), field);
         assert_eq!(
-            Field::Unknown(Some("Let's not".into())),
-            field
+            format!("{}", field),
+            format!("Unknown field {}", "Let's not")
         );
-        assert_eq!(format!("{}", field), format!("Unknown field {}", "Let's not"));
     }
     #[test]
     fn test_from_unknown_field_with_notab() {

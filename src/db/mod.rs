@@ -1,2 +1,2 @@
-pub(crate) mod migrations;
 pub(crate) mod game;
+pub(crate) mod migrations;
