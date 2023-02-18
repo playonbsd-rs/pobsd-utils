@@ -15,30 +15,30 @@ pub fn split_line(line: &str) -> (Option<&str>, Option<&str>) {
 }
 
 #[cfg(test)]
-mod tests {
+mod split_line_tests {
     use super::*;
     #[test]
-    fn test_empty() {
+    fn test_line_is_empty() {
         let test_str = "";
         assert_eq!((None, None), split_line(&test_str));
     }
     #[test]
-    fn test_no_tab() {
+    fn test_line_has_no_tab() {
         let test_str = "notab";
         assert_eq!((Some("notab"), None), split_line(&test_str));
     }
     #[test]
-    fn test_no_tab_space() {
+    fn test_line_has_no_tab_field_has_space() {
         let test_str = "no tab";
         assert_eq!((Some("no tab"), None), split_line(&test_str));
     }
     #[test]
-    fn test_one_tab() {
+    fn test_line_has_one_tab() {
         let test_str = "one\ttab";
         assert_eq!((Some("one"), Some("tab")), split_line(&test_str));
     }
     #[test]
-    fn test_two_tab() {
+    fn test_line_has_two_tabs() {
         let test_str = "one\ttab\tanother";
         assert_eq!((Some("one"), Some("tab\tanother")), split_line(&test_str));
     }

@@ -48,7 +48,7 @@ pub enum Field {
     /// Store the result of a unknown line of the database
     /// The left hand side and the right hand side (if
     /// any) are stores separately.
-    Unknown(Option<String>, Option<String>),
+    Unknown(Option<String>),
 }
 
 impl fmt::Display for Field {
@@ -118,20 +118,12 @@ impl fmt::Display for Field {
                 Some(name) => write!(f, "Updated\t{}", name),
                 None => write!(f, "Updated"),
             },
-            Field::Unknown(left, right) => match right {
-                Some(right) => {
-                    if let Some(left) = left {
-                        write!(f, "Unknown\t{}\t{}", left, right)
-                    } else {
-                        write!(f, "Unknown\t{}", right)
-                    }
+            Field::Unknown(field) => match field {
+                Some(field) => {
+                    write!(f, "Unknown field {}", field)
                 }
                 None => {
-                    if let Some(left) = left {
-                        write!(f, "Unknown\t{}", left)
-                    } else {
-                        write!(f, "Unknown")
-                    }
+                    write!(f, "Unexpected patern")
                 }
             },
         }
@@ -230,22 +222,19 @@ impl Field {
                     Some(right) => Field::Updated(Some(right.into())),
                     None => Field::Updated(None),
                 },
-                _ => match right {
-                    Some(right) => Field::Unknown(Some(left.into()), Some(right.into())),
-                    None => Field::Unknown(Some(left.into()), None),
-                },
+                _ => Field::Unknown(Some(left.into())),
             }
         } else {
-            Field::Unknown(Some("Unknown".into()), None)
+            Field::Unknown(None)
         }
     }
 }
 
 #[cfg(test)]
-mod test_methods {
+mod field_tests {
     use super::*;
     #[test]
-    fn from_game_line() {
+    fn test_from_game_line() {
         let input = "Game\tToto";
         let field = Field::from(&input);
         assert_eq!(Field::Game(Some("Toto".into())), field);
@@ -256,7 +245,7 @@ mod test_methods {
         assert_eq!(format!("{}", field), input);
     }
     #[test]
-    fn from_cover_line() {
+    fn test_from_cover_line() {
         let input = "Cover\tToto";
         let field = Field::from(&input);
         assert_eq!(Field::Cover(Some("Toto".into())), field);
@@ -267,7 +256,7 @@ mod test_methods {
         assert_eq!(format!("{}", field), input);
     }
     #[test]
-    fn from_engine_line() {
+    fn test_from_engine_line() {
         let input = "Engine\tToto";
         let field = Field::from(&input);
         assert_eq!(Field::Engine(Some("Toto".into())), field);
@@ -278,7 +267,7 @@ mod test_methods {
         assert_eq!(format!("{}", field), input);
     }
     #[test]
-    fn from_setup_line() {
+    fn test_from_setup_line() {
         let input = "Setup\tToto";
         let field = Field::from(&input);
         assert_eq!(Field::Setup(Some("Toto".into())), field);
@@ -289,7 +278,7 @@ mod test_methods {
         assert_eq!(format!("{}", field), input);
     }
     #[test]
-    fn from_runtime_line() {
+    fn test_from_runtime_line() {
         let input = "Runtime\tToto";
         let field = Field::from(&input);
         assert_eq!(Field::Runtime(Some("Toto".into())), field);
@@ -300,7 +289,7 @@ mod test_methods {
         assert_eq!(format!("{}", field), input);
     }
     #[test]
-    fn from_hints_line() {
+    fn test_from_hints_line() {
         let input = "Hints\tToto";
         let field = Field::from(&input);
         assert_eq!(Field::Hints(Some("Toto".into())), field);
@@ -311,7 +300,7 @@ mod test_methods {
         assert_eq!(format!("{}", field), input);
     }
     #[test]
-    fn from_dev_line() {
+    fn test_from_dev_line() {
         let input = "Dev\tToto";
         let field = Field::from(&input);
         assert_eq!(Field::Dev(Some("Toto".into())), field);
@@ -322,7 +311,7 @@ mod test_methods {
         assert_eq!(format!("{}", field), input);
     }
     #[test]
-    fn from_publi_line() {
+    fn test_from_publi_line() {
         let input = "Pub\tToto";
         let field = Field::from(&input);
         assert_eq!(Field::Publi(Some("Toto".into())), field);
@@ -333,7 +322,7 @@ mod test_methods {
         assert_eq!(format!("{}", field), input);
     }
     #[test]
-    fn from_version_line() {
+    fn test_from_version_line() {
         let input = "Version\tToto";
         let field = Field::from(&input);
         assert_eq!(Field::Version(Some("Toto".into())), field);
@@ -344,7 +333,7 @@ mod test_methods {
         assert_eq!(format!("{}", field), input);
     }
     #[test]
-    fn from_status_line() {
+    fn test_from_status_line() {
         let input = "Status\tToto";
         let field = Field::from(&input);
         assert_eq!(Field::Status(Some("Toto".into())), field);
@@ -355,7 +344,7 @@ mod test_methods {
         assert_eq!(format!("{}", field), input);
     }
     #[test]
-    fn from_store_line() {
+    fn test_from_store_line() {
         let input = "Store\tfirst second";
         let field = Field::from(&input);
         assert_eq!(
@@ -369,7 +358,7 @@ mod test_methods {
         assert_eq!(format!("{}", field), input);
     }
     #[test]
-    fn from_genre_line() {
+    fn test_from_genre_line() {
         let input = "Genre\tfirst, second";
         let field = Field::from(&input);
         assert_eq!(
@@ -383,7 +372,7 @@ mod test_methods {
         assert_eq!(format!("{}", field), input);
     }
     #[test]
-    fn from_tag_line() {
+    fn test_from_tag_line() {
         let input = "Tags\tfirst, second";
         let field = Field::from(&input);
         assert_eq!(
@@ -397,7 +386,7 @@ mod test_methods {
         assert_eq!(format!("{}", field), input);
     }
     #[test]
-    fn from_year_line() {
+    fn test_from_year_line() {
         let input = "Year\t1980";
         let field = Field::from(&input);
         assert_eq!(Field::Year(Some("1980".into())), field);
@@ -408,20 +397,20 @@ mod test_methods {
         assert_eq!(format!("{}", field), input);
     }
     #[test]
-    fn from_malformed_line() {
+    fn test_from_unknown_field() {
         let input = "Let's not\tpanic";
         let field = Field::from(&input);
         assert_eq!(
-            Field::Unknown(Some("Let's not".into()), Some("panic".into())),
+            Field::Unknown(Some("Let's not".into())),
             field
         );
-        assert_eq!(format!("{}", field), format!("Unknown\t{}", input));
+        assert_eq!(format!("{}", field), format!("Unknown field {}", "Let's not"));
     }
     #[test]
-    fn from_malformed_line_notab() {
+    fn test_from_unknown_field_with_notab() {
         let input = "Let's not";
         let field = Field::from(&input);
-        assert_eq!(Field::Unknown(Some("Let's not".into()), None), field);
-        assert_eq!(format!("{}", field), format!("Unknown\t{}", input));
+        assert_eq!(Field::Unknown(Some("Let's not".into())), field);
+        assert_eq!(format!("{}", field), format!("Unknown field {}", input));
     }
 }

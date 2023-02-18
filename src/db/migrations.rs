@@ -30,7 +30,7 @@ fn create_game_table(conn: &Connection) -> Result<()> {
 }
 
 #[cfg(test)]
-mod test_migrations {
+mod migrations_tests {
     use super::*;
     #[test]
     fn test_create_game_table() {

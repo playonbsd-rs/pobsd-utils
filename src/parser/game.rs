@@ -67,12 +67,15 @@ pub struct Game {
 }
 
 impl<'a> Game {
+    pub fn new() -> Self {
+        Self::default()
+    }
     fn get_ordering_name(&'a self) -> String {
-        if let Some(name) = self.name.strip_prefix("The ") {
-            return name.to_lowercase();
+        if let Some(name) = self.name.to_lowercase().strip_prefix("the ") {
+            return name.to_string();
         }
-        if let Some(name) = self.name.strip_prefix("A ") {
-            return name.to_lowercase();
+        if let Some(name) = self.name.to_lowercase().strip_prefix("a ") {
+            return name.to_string();
         }
         self.name.to_lowercase()
     }
@@ -192,7 +195,7 @@ impl fmt::Display for Game {
 /* ------------------------- TESTS --------------------------*/
 
 #[cfg(test)]
-mod test_game_methods {
+mod game_tests {
     use super::*;
     fn create_game() -> Game {
         let mut game = Game::default();
@@ -218,10 +221,26 @@ mod test_game_methods {
         game
     }
     #[test]
-    fn default_is_new() {
+    fn test_default_equivalent_to_new() {
         let game = Game::default();
-        let game_bis = Game::default();
+        let game_bis = Game::new();
         assert!(game == game_bis);
+    }
+    #[test]
+    fn test_get_ordering_name_with_a() {
+        let mut game = create_game();
+        game.name = "A champion".into();
+        assert_eq!(game.get_ordering_name(), "champion");
+        game.name = "a champion".into();
+        assert_eq!(game.get_ordering_name(), "champion");
+    }
+     #[test]
+    fn test_get_ordering_name_with_the() {
+        let mut game = create_game();
+        game.name = "The champion".into();
+        assert_eq!(game.get_ordering_name(), "champion");
+        game.name = "the champion".into();
+        assert_eq!(game.get_ordering_name(), "champion");
     }
     #[test]
     fn test_ordering() {
