@@ -29,8 +29,6 @@ use std::fmt;
 
 #[derive(Serialize, Clone, Default, Debug, PartialEq, Eq)]
 pub struct Game {
-    /// The id of the game.
-    pub id: usize,
     /// The name of the game.
     pub name: String,
     /// The cover of the game.

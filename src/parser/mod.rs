@@ -7,3 +7,4 @@ pub(crate) mod split_line;
 
 pub(crate) use self::parser::Parser;
 pub(crate) use self::parser::ParserResult;
+pub(crate) use self::game::Game;
