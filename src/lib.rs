@@ -31,7 +31,7 @@ pub fn check(db: impl AsRef<Path>) -> Result<(), std::io::Error> {
         ParserResult::WithError(games, lines) => {
             let message: Vec<String> = lines.into_iter().map(|x| x.to_string()).collect();
             println!("> {} games parsed.", games.len());
-            println!("> Error occured at lines {}.", message.join(", "));
+            println!("> Errors occured at lines {}.", message.join(", "));
         }
         ParserResult::WithoutError(games) => {
             println!("> {} games parsed without error.", games.len());
@@ -45,7 +45,7 @@ pub fn export(db: impl AsRef<Path>, js: impl AsRef<Path>) -> Result<(), std::io:
     match parser.load_from_file(&db)? {
         ParserResult::WithError(_, lines) => {
             let message: Vec<String> = lines.into_iter().map(|x| x.to_string()).collect();
-            eprintln!("> Error occured at lines {}.", message.join(", "));
+            eprintln!("> Errors occured at lines {}.", message.join(", "));
             eprintln!("> Export aborted.");
         }
         ParserResult::WithoutError(games) => {
