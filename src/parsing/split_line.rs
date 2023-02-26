@@ -3,7 +3,7 @@ pub fn split_line(line: &str) -> (Option<&str>, Option<&str>) {
     if line.is_empty() {
         return (None, None);
     }
-    match line.split_once("\t") {
+    match line.split_once('\t') {
         None => (Some(line), None),
         Some((left, right)) => {
             if right.is_empty() {

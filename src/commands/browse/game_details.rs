@@ -2,7 +2,7 @@ use tui::style::{Modifier, Style};
 use tui::text::{Span, Spans};
 use tui::widgets::{Block, BorderType, Borders, Paragraph};
 
-use crate::parser::Game;
+use crate::parsing::Game;
 /*
 pub struct GameDetails<'a> {
     game: &'a Game,
@@ -13,7 +13,7 @@ impl<'a> GameDetails<'a> {
     }
 */
 
-pub fn display_game<'a>(game: &'a Game) -> (Paragraph<'a>, Paragraph<'a>, Paragraph<'a>) {
+pub fn display_game(game: &Game) -> (Paragraph, Paragraph, Paragraph) {
     let mut res: Vec<Spans> = Vec::new();
     let mut tags: Vec<Spans> = Vec::new();
     let mut genres: Vec<Spans> = Vec::new();

@@ -14,7 +14,7 @@ use tui::{Frame, Terminal};
 pub(crate) mod app_state;
 pub(crate) mod game_details;
 
-use crate::parser::{Parser, ParserResult};
+use crate::parsing::{Parser, ParserResult};
 pub(crate) use app_state::AppState;
 pub(crate) use app_state::InputMode;
 pub(crate) use game_details::display_game;
@@ -53,7 +53,7 @@ pub fn browse(db: impl AsRef<Path>) -> Result<(), std::io::Error> {
     disable_raw_mode()?;
 
     if let Err(e) = result {
-        println!("{}", e.to_string());
+        println!("{}", e);
     }
 
     Ok(())

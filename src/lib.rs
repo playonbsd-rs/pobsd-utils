@@ -1,4 +1,4 @@
-use crate::parser::{Game, Parser, ParserResult};
+use crate::parsing::{Game, Parser, ParserResult};
 use std::io::Write;
 use std::path::Path;
 
@@ -7,7 +7,7 @@ extern crate serde_derive;
 extern crate serde_json;
 
 pub mod commands;
-pub(crate) mod parser;
+pub(crate) mod parsing;
 
 pub use crate::commands::browse::browse;
 
@@ -51,7 +51,7 @@ pub fn export(db: impl AsRef<Path>, js: impl AsRef<Path>) -> Result<(), std::io:
         ParserResult::WithoutError(games) => {
             let game_export = GamesExport::new(games);
             let mut js = std::fs::File::create(js)?;
-            js.write(&serde_json::to_vec_pretty(&game_export).unwrap())?;
+            js.write_all(&serde_json::to_vec_pretty(&game_export).unwrap())?;
         }
     }
     Ok(())

@@ -1,4 +1,4 @@
-use crate::parser::Game;
+use crate::parsing::Game;
 use tui::widgets::ListState;
 
 pub(crate) enum InputMode {

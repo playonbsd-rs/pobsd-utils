@@ -71,9 +71,9 @@ pub enum ParserResult {
     WithoutError(Vec<Game>),
 }
 
-impl Into<Vec<Game>> for ParserResult {
-    fn into(self) -> Vec<Game> {
-        match self {
+impl From<ParserResult> for Vec<Game> {
+    fn from(val: ParserResult) -> Self {
+        match val {
             ParserResult::WithError(games, _) => games,
             ParserResult::WithoutError(games) => games,
         }
