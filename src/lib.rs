@@ -1,4 +1,4 @@
-use crate::parser::{Parser, ParserResult};
+use crate::parser::{Game, Parser, ParserResult};
 use std::io::Write;
 use std::path::Path;
 
@@ -11,6 +11,20 @@ pub(crate) mod parser;
 
 pub use crate::commands::browse::browse;
 
+#[derive(Debug, Serialize)]
+struct GamesExport {
+    count: usize,
+    games: Vec<Game>,
+}
+
+impl GamesExport {
+    pub fn new(games: Vec<Game>) -> Self {
+        Self {
+            count: games.len(),
+            games,
+        }
+    }
+}
 pub fn check(db: impl AsRef<Path>) -> Result<(), std::io::Error> {
     let parser = Parser::default();
     match parser.load_from_file(&db)? {
@@ -35,8 +49,9 @@ pub fn export(db: impl AsRef<Path>, js: impl AsRef<Path>) -> Result<(), std::io:
             eprintln!("> Export aborted.");
         }
         ParserResult::WithoutError(games) => {
+            let game_export = GamesExport::new(games);
             let mut js = std::fs::File::create(js)?;
-            js.write(&serde_json::to_vec_pretty(&games).unwrap())?;
+            js.write(&serde_json::to_vec_pretty(&game_export).unwrap())?;
         }
     }
     Ok(())

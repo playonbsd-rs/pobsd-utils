@@ -37,10 +37,10 @@ pub fn display_game<'a>(game: &'a Game) -> (Paragraph<'a>, Paragraph<'a>, Paragr
         res.push(format_single("Hints".to_string(), hints.to_string()));
     }
     if let Some(item) = &game.genres {
-        tags.push(format_tags(item.clone()));
+        genres.push(format_tags(item.clone()));
     }
-    if let Some(tags) = &game.tags {
-        genres.push(format_tags(tags.clone()));
+    if let Some(item) = &game.tags {
+        tags.push(format_tags(item.clone()));
     }
     if let Some(year) = &game.year {
         res.push(format_single("Year".to_string(), year.to_string()));
