@@ -8,13 +8,13 @@ use tui::backend::{Backend, CrosstermBackend};
 use tui::layout::{Constraint, Direction, Layout, Rect};
 use tui::style::{Color, Modifier, Style};
 use tui::text::Span;
-use tui::widgets::{Block, BorderType, Borders, List, ListItem, Paragraph, Wrap};
+use tui::widgets::{Block, BorderType, Borders, List, ListItem, Paragraph};
 use tui::{Frame, Terminal};
 
 pub(crate) mod app_state;
 pub(crate) mod game_details;
 
-use crate::parser::{Game, Parser, ParserResult};
+use crate::parser::{Parser, ParserResult};
 pub(crate) use app_state::AppState;
 pub(crate) use app_state::InputMode;
 pub(crate) use game_details::display_game;
@@ -123,10 +123,13 @@ fn ui<B: Backend>(f: &mut Frame<B>, state: &mut AppState) {
 
 fn detail_section<B: Backend>(f: &mut Frame<B>, state: &mut AppState, area: Rect) {
     let game = match state.list_state.selected() {
-        Some(id) => match state.mode {
-            InputMode::Normal => Some(state.games[id].to_owned()),
-            InputMode::Search => Some(state.search_list[id].to_owned()),
-        },
+        Some(id) => {
+            if state.search_text.is_empty() {
+                state.games.get(id)
+            } else {
+                state.search_list.get(id)
+            }
+        }
         None => None,
     };
 

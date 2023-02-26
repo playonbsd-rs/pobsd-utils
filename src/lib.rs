@@ -1,14 +1,13 @@
-use crate::parser::{Parser, ParserResult, Game};
-use std::path::Path;
+use crate::parser::{Parser, ParserResult};
 use std::io::Write;
+use std::path::Path;
 
 #[macro_use]
 extern crate serde_derive;
 extern crate serde_json;
 
-pub(crate) mod db;
-pub(crate) mod parser;
 pub mod commands;
+pub(crate) mod parser;
 
 pub use crate::commands::browse::browse;
 
@@ -43,9 +42,3 @@ pub fn export(db: impl AsRef<Path>, js: impl AsRef<Path>) -> Result<(), std::io:
     }
     Ok(())
 }
-
-pub fn add_game(file: impl AsRef<Path>) {
-    let mut game = Game::new();
-}
-
-

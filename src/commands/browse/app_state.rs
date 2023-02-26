@@ -40,15 +40,27 @@ impl AppState {
             .collect();
     }
     pub(crate) fn move_up(&mut self) {
+        let len_list = match self.mode {
+            InputMode::Search => self.search_list.len(),
+            _ => self.games.len(),
+        };
         let selected = match self.list_state.selected() {
             Some(v) => {
-                if v == 0 {
+                if len_list == 0 {
+                    None
+                } else if v == 0 {
                     Some(v)
                 } else {
                     Some(v - 1)
                 }
             }
-            None => Some(0),
+            None => {
+                if len_list == 0 {
+                    None
+                } else {
+                    Some(0)
+                }
+            }
         };
         self.list_state.select(selected);
     }
@@ -59,13 +71,21 @@ impl AppState {
         };
         let selected = match self.list_state.selected() {
             Some(v) => {
-                if v >= len_list - 1 {
+                if len_list == 0 {
+                    None
+                } else if v >= len_list - 1 {
                     Some(len_list - 1)
                 } else {
                     Some(v + 1)
                 }
             }
-            None => Some(0),
+            None => {
+                if len_list == 0 {
+                    None
+                } else {
+                    Some(0)
+                }
+            }
         };
         self.list_state.select(selected);
     }
