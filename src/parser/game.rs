@@ -245,9 +245,7 @@ mod game_tests {
     fn test_ordering() {
         let mut game1 = create_game();
         let mut game2 = create_game();
-        game1.id = 1;
         game1.name = "Abc".into();
-        game2.id = 2;
         game2.name = "Def".into();
         assert!(game2.gt(&game1));
         assert!(game2.ge(&game1));
@@ -285,7 +283,6 @@ Status
 Added
 Updated";
         let game = Game {
-            id: 1,
             name: "AaaaaAAaaaAAAaaAAAAaAAAAA!!! for the Awesome".to_string(),
             cover: Some("AaaaaA_for_the_Awesome_Cover.jpg".to_string()),
             engine: None,
