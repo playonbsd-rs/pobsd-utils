@@ -35,7 +35,6 @@ pub fn export(db: impl AsRef<Path>, js: impl AsRef<Path>) -> Result<(), std::io:
             eprintln!("> Export aborted.");
         }
         ParserResult::WithoutError(games) => {
-            println!("{}", serde_json::to_string_pretty(&games).unwrap());
             let mut js = std::fs::File::create(js)?;
             js.write(&serde_json::to_vec_pretty(&games).unwrap())?;
         }
