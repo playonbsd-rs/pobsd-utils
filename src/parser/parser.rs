@@ -61,6 +61,7 @@ enum ParserState {
 }
 
 pub enum ParsingMode {
+    #[allow(dead_code)]
     Strict,
     Relaxed,
 }
@@ -99,6 +100,7 @@ impl Default for Parser {
     }
 }
 impl Parser {
+    #[allow(dead_code)]
     pub fn new(mode: ParsingMode) -> Self {
         Self {
             state: ParserState::Game,

@@ -65,6 +65,7 @@ pub struct Game {
 }
 
 impl<'a> Game {
+    #[allow(dead_code)]
     pub fn new() -> Self {
         Self::default()
     }
