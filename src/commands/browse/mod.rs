@@ -1,4 +1,4 @@
-use crossterm::event::{DisableMouseCapture, EnableMouseCapture, KeyCode, KeyEventKind};
+use crossterm::event::{DisableMouseCapture, EnableMouseCapture, KeyCode};
 use crossterm::terminal::{
     disable_raw_mode, enable_raw_mode, EnterAlternateScreen, LeaveAlternateScreen,
 };
@@ -8,80 +8,27 @@ use tui::backend::{Backend, CrosstermBackend};
 use tui::layout::{Constraint, Direction, Layout, Rect};
 use tui::style::{Color, Modifier, Style};
 use tui::text::Span;
-use tui::widgets::{Block, BorderType, Borders, List, ListItem, ListState, Paragraph};
+use tui::widgets::{Block, BorderType, Borders, List, ListItem, Paragraph, Wrap};
 use tui::{Frame, Terminal};
 
+pub(crate) mod app_state;
+pub(crate) mod game_details;
+
 use crate::parser::{Game, Parser, ParserResult};
+pub(crate) use app_state::AppState;
+pub(crate) use app_state::InputMode;
+pub(crate) use game_details::display_game;
 
-enum InputMode {
-    Normal,
-    Search,
-}
-
-struct AppState {
-    mode: InputMode,
-    games: Vec<Game>,
-    list_state: ListState,
-    search_text: String,
-    search_list: Vec<Game>,
-}
-
-impl AppState {
-    pub fn new() -> AppState {
-        AppState {
-            mode: InputMode::Normal,
-            games: vec![],
-            list_state: ListState::default(),
-            search_text: String::new(),
-            search_list: vec![],
-        }
-    }
-    pub fn change_mode(&mut self, mode: InputMode) {
-        self.mode = mode;
-    }
-    pub fn search(&mut self) {
-        self.search_list = self
-            .games
-            .clone()
-            .into_iter()
-            .filter(|item| {
-                item.name
-                    .to_lowercase()
-                    .contains(&self.search_text.to_lowercase())
-            })
-            .collect();
-    }
-    pub fn move_up(&mut self) {
-        let selected = match self.list_state.selected() {
-            Some(v) => {
-                if v == 0 {
-                    Some(v)
-                } else {
-                    Some(v - 1)
-                }
-            }
-            None => Some(0),
-        };
-        self.list_state.select(selected);
-    }
-    pub fn move_down(&mut self) {
-        let len_list = match self.mode {
-            InputMode::Search => self.search_list.len(),
-            _ => self.games.len(),
-        };
-        let selected = match self.list_state.selected() {
-            Some(v) => {
-                if v >= len_list - 1 {
-                    Some(len_list - 1)
-                } else {
-                    Some(v + 1)
-                }
-            }
-            None => Some(0),
-        };
-        self.list_state.select(selected);
-    }
-}
+const APP_KEYS_BINDING: &str = r#"
+Key bindings
+s:    Search mode
+ESC:  On search mode, back to list mode
+UP:   Previous on the list
+DOWN: Next on the list  
+k:    On list mode, previous on the list
+j:    On list mode, next on the list
+q:    On list mode, exit
+"#;
 
 pub fn browse(db: impl AsRef<Path>) -> Result<(), std::io::Error> {
     let parser = Parser::default();
@@ -175,26 +122,49 @@ fn ui<B: Backend>(f: &mut Frame<B>, state: &mut AppState) {
 }
 
 fn detail_section<B: Backend>(f: &mut Frame<B>, state: &mut AppState, area: Rect) {
-    let game_to_show = state.games[1].to_owned();
-    let game_to_show = ListItem::new(Span::from(game_to_show.name));
+    let game = match state.list_state.selected() {
+        Some(id) => match state.mode {
+            InputMode::Normal => Some(state.games[id].to_owned()),
+            InputMode::Search => Some(state.search_list[id].to_owned()),
+        },
+        None => None,
+    };
 
     let new_selection_chunk = Layout::default()
-        .margin(2)
+        .horizontal_margin(2)
+        .vertical_margin(1)
         .direction(Direction::Vertical)
         .constraints(
             [
-                Constraint::Min(4),
+                Constraint::Length(2),
+                Constraint::Min(10),
                 Constraint::Length(3),
                 Constraint::Length(3),
-                Constraint::Length(3),
-                Constraint::Length(3),
+                Constraint::Length(9),
             ]
             .as_ref(),
         )
         .split(area);
+    let title = match &game {
+        Some(game) => Paragraph::new(game.name.to_string().to_uppercase()).style(
+            Style::default()
+                .fg(Color::LightRed)
+                .add_modifier(Modifier::BOLD),
+        ),
+        None => Paragraph::new("Select a game"),
+    };
+    f.render_widget(title, new_selection_chunk[0]);
 
-    let desc = Paragraph::new("test");
-    f.render_widget(desc, new_selection_chunk[3]);
+    let (desc, genres, tags) = match &game {
+        Some(game) => display_game(game),
+        None => (Paragraph::new(""), Paragraph::new(""), Paragraph::new("")),
+    };
+    f.render_widget(desc, new_selection_chunk[1]);
+    f.render_widget(genres, new_selection_chunk[2]);
+    f.render_widget(tags, new_selection_chunk[3]);
+
+    let key_bindings = Paragraph::new(APP_KEYS_BINDING);
+    f.render_widget(key_bindings, new_selection_chunk[4]);
 }
 
 fn list_section<B: Backend>(f: &mut Frame<B>, state: &mut AppState, area: Rect) {
@@ -210,7 +180,8 @@ fn list_section<B: Backend>(f: &mut Frame<B>, state: &mut AppState, area: Rect) 
         .collect();
 
     let list_chunk = Layout::default()
-        .margin(2)
+        .horizontal_margin(2)
+        .vertical_margin(1)
         .direction(Direction::Vertical)
         .constraints([Constraint::Length(3), Constraint::Min(1)].as_ref())
         .split(area);
@@ -231,6 +202,10 @@ fn list_section<B: Backend>(f: &mut Frame<B>, state: &mut AppState, area: Rect) 
     let list = List::new(items)
         .block(Block::default())
         //.highlight_symbol("->")
-        .highlight_style(Style::default().add_modifier(Modifier::BOLD));
+        .highlight_style(
+            Style::default()
+                .add_modifier(Modifier::BOLD)
+                .fg(Color::LightMagenta),
+        );
     f.render_stateful_widget(list, list_chunk[1], &mut state.list_state)
 }
