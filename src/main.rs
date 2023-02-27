@@ -33,6 +33,9 @@ fn cli() -> Command {
 }
 
 fn main() -> Result<(), std::io::Error> {
+    pledge_promises![Stdio Unveil Rpath Wpath Cpath Tty]
+        .or_else(pledge::Error::ignore_platform)
+        .unwrap();
     let matches = cli().get_matches();
 
     match matches.subcommand() {
