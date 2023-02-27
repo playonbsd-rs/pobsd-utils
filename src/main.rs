@@ -1,4 +1,5 @@
 use clap::{arg, Command};
+use pledge::pledge_promises;
 use unveil::unveil;
 
 use pobsd::{browse, check, export};
@@ -36,6 +37,9 @@ fn main() -> Result<(), std::io::Error> {
 
     match matches.subcommand() {
         Some(("check", sub_matches)) => {
+            pledge_promises![Stdio Unveil Rpath]
+                .or_else(pledge::Error::ignore_platform)
+                .unwrap();
             let db = sub_matches.get_one::<String>("DATABASE").expect("required");
             unveil(db, "r")
                 .or_else(unveil::Error::ignore_platform)
@@ -46,6 +50,9 @@ fn main() -> Result<(), std::io::Error> {
             check(db)?
         }
         Some(("export", sub_matches)) => {
+            pledge_promises![Stdio Unveil Rpath Wpath Cpath]
+                .or_else(pledge::Error::ignore_platform)
+                .unwrap();
             let db = sub_matches.get_one::<String>("DATABASE").expect("required");
             let js = sub_matches.get_one::<String>("JSON").expect("required");
             unveil(db, "r")
@@ -60,6 +67,9 @@ fn main() -> Result<(), std::io::Error> {
             export(db, js)?
         }
         Some(("browse", sub_matches)) => {
+            pledge_promises![Stdio Unveil Rpath Tty]
+                .or_else(pledge::Error::ignore_platform)
+                .unwrap();
             let db = sub_matches.get_one::<String>("DATABASE").expect("required");
             unveil(db, "r")
                 .or_else(unveil::Error::ignore_platform)

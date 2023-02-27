@@ -223,11 +223,21 @@ dependencies = [
 ]
 
 [[package]]
+name = "pledge"
+version = "0.4.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "252599417b7d9a43b7fdc63dd790b0848666a8910b2ebe1a25118309c3c981e5"
+dependencies = [
+ "libc",
+]
+
+[[package]]
 name = "pobsd"
 version = "0.1.0"
 dependencies = [
  "clap",
  "crossterm 0.26.0",
+ "pledge",
  "serde",
  "serde_derive",
  "serde_json",
