@@ -1,3 +1,6 @@
+[![Rust](https://github.com/Hukadan/pobsd-rs/actions/workflows/rust.yml/badge.svg)](https://github.com/Hukadan/pobsd-rs/actions/workflows/rust.yml)
+[![rust-clippy analyze](https://github.com/Hukadan/pobsd-rs/actions/workflows/rust-clippy.yml/badge.svg)](https://github.com/Hukadan/pobsd-rs/actions/workflows/rust-clippy.yml)
+
 ## pobsd
 pobsd is a tool written in Rust designed to interact with the PlayOnBSD
 database that can be find [here](https://github.com/playonbsd/OpenBSD-Games-Database)
