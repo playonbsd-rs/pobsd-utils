@@ -232,6 +232,7 @@ dependencies = [
  "serde_derive",
  "serde_json",
  "tui",
+ "unveil",
 ]
 
 [[package]]
@@ -407,6 +408,15 @@ name = "unicode-width"
 version = "0.1.10"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "c0edd1e5b14653f783770bce4a4dabb4a5108a5370a5f5d8cfe8710c361f6c8b"
+
+[[package]]
+name = "unveil"
+version = "0.3.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "5e7fa867d559102001ec694165ed17d5f82e95213060a65f9c8b6280084bbfec"
+dependencies = [
+ "libc",
+]
 
 [[package]]
 name = "wasi"

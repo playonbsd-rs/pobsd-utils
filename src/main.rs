@@ -1,4 +1,5 @@
 use clap::{arg, Command};
+use unveil::unveil;
 
 use pobsd::{browse, check, export};
 
@@ -36,15 +37,36 @@ fn main() -> Result<(), std::io::Error> {
     match matches.subcommand() {
         Some(("check", sub_matches)) => {
             let db = sub_matches.get_one::<String>("DATABASE").expect("required");
+            unveil(db, "r")
+                .or_else(unveil::Error::ignore_platform)
+                .unwrap();
+            unveil("", "")
+                .or_else(unveil::Error::ignore_platform)
+                .unwrap();
             check(db)?
         }
         Some(("export", sub_matches)) => {
             let db = sub_matches.get_one::<String>("DATABASE").expect("required");
             let js = sub_matches.get_one::<String>("JSON").expect("required");
+            unveil(db, "r")
+                .or_else(unveil::Error::ignore_platform)
+                .unwrap();
+            unveil(js, "cw")
+                .or_else(unveil::Error::ignore_platform)
+                .unwrap();
+            unveil("", "")
+                .or_else(unveil::Error::ignore_platform)
+                .unwrap();
             export(db, js)?
         }
         Some(("browse", sub_matches)) => {
             let db = sub_matches.get_one::<String>("DATABASE").expect("required");
+            unveil(db, "r")
+                .or_else(unveil::Error::ignore_platform)
+                .unwrap();
+            unveil("", "")
+                .or_else(unveil::Error::ignore_platform)
+                .unwrap();
             browse(db)?
         }
         _ => println!("Unsupported command"),
