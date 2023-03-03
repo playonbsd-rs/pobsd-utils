@@ -282,7 +282,7 @@ dependencies = [
  "confy",
  "crossterm 0.26.1",
  "pledge",
- "pobsd-parser",
+ "pobsd-parser 0.1.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "serde",
  "serde_derive",
  "serde_json",
@@ -293,6 +293,17 @@ dependencies = [
 [[package]]
 name = "pobsd-parser"
 version = "0.1.0"
+dependencies = [
+ "serde",
+ "serde_derive",
+ "serde_json",
+]
+
+[[package]]
+name = "pobsd-parser"
+version = "0.1.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "a7af750af9583d1886f0c4f903cb921c027c0819776ed0fd0f99a63e7f8ed9c8"
 dependencies = [
  "serde",
  "serde_derive",

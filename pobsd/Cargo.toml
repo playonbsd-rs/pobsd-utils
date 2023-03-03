@@ -1,9 +1,16 @@
 [package]
 name = "pobsd"
+description = "Simple tool to interact with the PlayOnBSD database"
 version = "0.1.0"
 edition = "2021"
-
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+authors = ["Hukadan <me@hukadan.org>"]
+version = "0.1.0"
+edition = "2021"
+homepage = "https://github.com/Hukadan/pobsd-rs"
+documentation = "https://github.com/Hukadan/pobsd-rs"
+license = "MIT"
+readme = "README.md"
+keywords = ["OpenBSD", "PlayOnBSD"]
 
 [dependencies]
 tui = "0.19"
@@ -15,4 +22,4 @@ clap = "4"
 unveil = "0.3"
 pledge = "0.4"
 confy = "0.5"
-pobsd-parser = { path = "../pobsd-parser" }
+pobsd-parser = "0.1"
