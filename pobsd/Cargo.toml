@@ -1,0 +1,22 @@
+[package]
+name = "pobsd"
+version = "0.1.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+tui = "0.19.0"
+crossterm = "0.26.0"
+serde = "1.0"
+serde_json = "1.0"
+serde_derive = "1.0"
+clap = "4.0"
+unveil = "0.3.2"
+pledge = "0.4.2"
+confy = "0.5.1"
+igdb-rs = { path = "../../igdb-rs", optional = true}
+
+[features]
+default = []
+igdb = ["igdb-rs"]

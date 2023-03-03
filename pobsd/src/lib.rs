@@ -7,6 +7,7 @@ extern crate serde_derive;
 extern crate serde_json;
 
 pub mod commands;
+pub mod config;
 pub(crate) mod parsing;
 
 pub use crate::commands::browse::browse;
