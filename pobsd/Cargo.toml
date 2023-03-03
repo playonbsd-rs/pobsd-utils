@@ -17,7 +17,3 @@ pledge = "0.4.2"
 confy = "0.5.1"
 igdb-rs = { path = "../../igdb-rs", optional = true}
 pobsd-parser = { path = "../pobsd-parser" }
-
-[features]
-default = []
-igdb = ["igdb-rs"]
