@@ -6,7 +6,7 @@ version = "0.1.0"
 edition = "2021"
 homepage = "https://github.com/Hukadan/pobsd-rs"
 documentation = "https://docs.rs/pobsd-parser"
-licence = "MIT"
+license = "MIT"
 readme = "README.md"
 keywords = ["OpenBSD", "PlayOnBSD"]
 
