@@ -3,6 +3,7 @@ use crossterm::terminal::{
     disable_raw_mode, enable_raw_mode, EnterAlternateScreen, LeaveAlternateScreen,
 };
 use crossterm::{event, event::Event::Key, execute};
+use pobsd_parser::{Parser, ParserResult};
 use std::path::Path;
 use tui::backend::{Backend, CrosstermBackend};
 use tui::layout::{Constraint, Direction, Layout, Rect};
@@ -13,8 +14,6 @@ use tui::{Frame, Terminal};
 
 pub(crate) mod app_state;
 pub(crate) mod game_details;
-
-use crate::parsing::{Parser, ParserResult};
 pub(crate) use app_state::AppState;
 pub(crate) use app_state::InputMode;
 pub(crate) use game_details::display_game;

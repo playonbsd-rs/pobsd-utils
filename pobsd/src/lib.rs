@@ -1,14 +1,12 @@
-use crate::parsing::{Game, Parser, ParserResult};
+use pobsd_parser::{Game, Parser, ParserResult};
 use std::io::Write;
 use std::path::Path;
-
 #[macro_use]
 extern crate serde_derive;
 extern crate serde_json;
 
 pub mod commands;
 pub mod config;
-pub(crate) mod parsing;
 
 pub use crate::commands::browse::browse;
 

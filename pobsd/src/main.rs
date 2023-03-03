@@ -2,7 +2,7 @@ use clap::{arg, Command};
 use pledge::pledge_promises;
 use unveil::unveil;
 
-use pobsd::config::AppConfig;
+//use pobsd::config::AppConfig;
 use pobsd::{browse, check, export};
 
 fn cli() -> Command {
@@ -39,8 +39,10 @@ fn main() -> Result<(), std::io::Error> {
         .unwrap();
     let matches = cli().get_matches();
 
+    /*
     let config: AppConfig = confy::load("pobsd", "config").unwrap();
     println!("Here is {:#?}", config.igdb_cid);
+    */
 
     match matches.subcommand() {
         Some(("check", sub_matches)) => {

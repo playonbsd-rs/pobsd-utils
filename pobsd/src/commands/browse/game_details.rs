@@ -2,7 +2,7 @@ use tui::style::{Modifier, Style};
 use tui::text::{Span, Spans};
 use tui::widgets::{Block, BorderType, Borders, Paragraph};
 
-use crate::parsing::Game;
+use pobsd_parser::Game;
 /*
 pub struct GameDetails<'a> {
     game: &'a Game,
