@@ -15,5 +15,4 @@ clap = "4"
 unveil = "0.3"
 pledge = "0.4"
 confy = "0.5"
-igdb-rs = { path = "../../igdb-rs", optional = true}
 pobsd-parser = { path = "../pobsd-parser" }
