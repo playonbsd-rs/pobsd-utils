@@ -14,10 +14,9 @@ At the moment, it provides three functionalities:
 
 
 ### Installing
-At the moment, pobsd is not available as a crate.
-Therefore, you need to clone this repository and install
-it using `cargo install`. Make sure to update to your `$PATH`
-to be able to use it (usually by adding `$HOME/.cargo/bin`).
+You can install it using `cargo` with `cargo install pobsd`.
+Make sure to update to your `$PATH` to be able to use 
+it (usually by adding `$HOME/.cargo/bin`).
 
 ### Checking the database integrity
 For now, it boils down to checking if the parser can
