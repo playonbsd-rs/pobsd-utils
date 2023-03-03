@@ -3,7 +3,7 @@ the [PlayOnBSD Database](https://github.com/playonbsd/OpenBSD-Games-Database)
 (either provided as a string or as a file) into a vector of `Game` objects.
 
 ## Parser
-A new parser can be create using the `Parser::new` method and proving
+A new parser can be create using the `Parser::new` method and providing
 a `ParsingMode` enum as only argument.
 The parsing supports two modes represented by the two variants of the
 `ParsingMode` enum:
