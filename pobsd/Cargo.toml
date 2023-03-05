@@ -5,7 +5,6 @@ version = "0.1.2"
 edition = "2021"
 authors = ["Hukadan <me@hukadan.org>"]
 homepage = "https://github.com/Hukadan/pobsd-rs"
-documentation = "https://github.com/Hukadan/pobsd-rs"
 license = "MIT"
 readme = "README.md"
 keywords = ["OpenBSD", "PlayOnBSD"]
