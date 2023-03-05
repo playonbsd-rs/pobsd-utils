@@ -1,7 +1,11 @@
+mod library;
+use crate::library::{browse, check, export};
 use clap::{arg, Command};
 use pledge::pledge_promises;
-use pobsd::{browse, check, export};
 use unveil::unveil;
+extern crate serde_json;
+
+pub mod commands;
 
 fn cli() -> Command {
     Command::new("pobsdrs-parser")

@@ -1,12 +1,8 @@
+pub use crate::commands::browse::browse;
 use pobsd_parser::{Game, Parser, ParserResult};
+use serde_derive::Serialize;
 use std::io::Write;
 use std::path::Path;
-#[macro_use]
-extern crate serde_derive;
-extern crate serde_json;
-
-pub mod commands;
-pub use crate::commands::browse::browse;
 
 #[derive(Debug, Serialize)]
 struct GamesExport {
