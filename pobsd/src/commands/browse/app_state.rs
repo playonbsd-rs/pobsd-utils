@@ -1,9 +1,15 @@
 use pobsd_parser::Game;
 use tui::widgets::ListState;
 
+pub(crate) enum SearchMode {
+    Name,
+    Tag,
+    Genre,
+}
+
 pub(crate) enum InputMode {
     Normal,
-    Search,
+    Search(SearchMode),
 }
 
 pub(crate) struct AppState {
@@ -28,20 +34,58 @@ impl AppState {
         self.mode = mode;
     }
     pub(crate) fn search(&mut self) {
-        self.search_list = self
-            .games
-            .clone()
-            .into_iter()
-            .filter(|item| {
-                item.name
-                    .to_lowercase()
-                    .contains(&self.search_text.to_lowercase())
-            })
-            .collect();
+        match &self.mode {
+            InputMode::Search(search_mode) => match search_mode {
+                SearchMode::Name => {
+                    self.search_list = self
+                        .games
+                        .clone()
+                        .into_iter()
+                        .filter(|item| {
+                            item.name
+                                .to_lowercase()
+                                .contains(&self.search_text.to_lowercase())
+                        })
+                        .collect();
+                }
+                SearchMode::Tag => {
+                    self.search_list = self
+                        .games
+                        .clone()
+                        .into_iter()
+                        .filter(|item| match &item.tags {
+                            Some(tags) => {
+                                let tags = tags.join("|");
+                                tags.to_lowercase()
+                                    .contains(&self.search_text.to_lowercase())
+                            }
+                            None => false,
+                        })
+                        .collect();
+                }
+                SearchMode::Genre => {
+                    self.search_list = self
+                        .games
+                        .clone()
+                        .into_iter()
+                        .filter(|item| match &item.genres {
+                            Some(genres) => {
+                                let genres = genres.join("|");
+                                genres
+                                    .to_lowercase()
+                                    .contains(&self.search_text.to_lowercase())
+                            }
+                            None => false,
+                        })
+                        .collect();
+                }
+            },
+            _ => unreachable!(),
+        }
     }
     pub(crate) fn move_up(&mut self) {
         let len_list = match self.mode {
-            InputMode::Search => self.search_list.len(),
+            InputMode::Search(_) => self.search_list.len(),
             _ => self.games.len(),
         };
         let selected = match self.list_state.selected() {
@@ -66,7 +110,7 @@ impl AppState {
     }
     pub(crate) fn move_down(&mut self) {
         let len_list = match self.mode {
-            InputMode::Search => self.search_list.len(),
+            InputMode::Search(_) => self.search_list.len(),
             _ => self.games.len(),
         };
         let selected = match self.list_state.selected() {

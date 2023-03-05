@@ -15,12 +15,13 @@ use tui::{Frame, Terminal};
 pub(crate) mod app_state;
 pub(crate) mod game_details;
 pub(crate) use app_state::AppState;
-pub(crate) use app_state::InputMode;
+pub(crate) use app_state::{InputMode, SearchMode};
 pub(crate) use game_details::display_game;
 
 const APP_KEYS_BINDING: &str = r#"
 Key bindings
 s:    Search mode
+TAB:  On search mode, change search mode (name/tag/genre)
 ESC:  On search mode, back to list mode
 UP:   Previous on the list
 DOWN: Next on the list  
@@ -65,18 +66,18 @@ fn run_app<B: Backend>(
     loop {
         terminal.draw(|f| ui(f, state))?;
         if let Key(key) = event::read()? {
-            match state.mode {
+            match &state.mode {
                 InputMode::Normal => match key.code {
                     KeyCode::Char('q') => return Ok(()),
                     KeyCode::Char('s') => {
-                        state.change_mode(InputMode::Search);
+                        state.change_mode(InputMode::Search(SearchMode::Name));
                         state.list_state.select(None);
                     }
                     KeyCode::Up | KeyCode::Char('k') => state.move_up(),
                     KeyCode::Down | KeyCode::Char('j') => state.move_down(),
                     _ => {}
                 },
-                InputMode::Search => match key.code {
+                InputMode::Search(search_mode) => match key.code {
                     KeyCode::Esc => {
                         state.change_mode(InputMode::Normal);
                         state.search_text.clear();
@@ -88,6 +89,20 @@ fn run_app<B: Backend>(
                     }
                     KeyCode::Backspace => {
                         state.search_text.pop();
+                        state.search();
+                    }
+                    KeyCode::Tab => {
+                        match search_mode {
+                            SearchMode::Name => {
+                                state.change_mode(InputMode::Search(SearchMode::Tag))
+                            }
+                            SearchMode::Tag => {
+                                state.change_mode(InputMode::Search(SearchMode::Genre))
+                            }
+                            SearchMode::Genre => {
+                                state.change_mode(InputMode::Search(SearchMode::Name))
+                            }
+                        }
                         state.search();
                     }
                     KeyCode::Up => state.move_up(),
@@ -142,7 +157,7 @@ fn detail_section<B: Backend>(f: &mut Frame<B>, state: &mut AppState, area: Rect
                 Constraint::Min(10),
                 Constraint::Length(3),
                 Constraint::Length(3),
-                Constraint::Length(9),
+                Constraint::Length(10),
             ]
             .as_ref(),
         )
@@ -188,15 +203,23 @@ fn list_section<B: Backend>(f: &mut Frame<B>, state: &mut AppState, area: Rect) 
         .constraints([Constraint::Length(3), Constraint::Min(1)].as_ref())
         .split(area);
 
+    let search_title = match &state.mode {
+        InputMode::Search(search_mode) => match search_mode {
+            SearchMode::Name => " Search by name ",
+            SearchMode::Tag => " Search by tag ",
+            SearchMode::Genre => " Search by genre ",
+        },
+        _ => " Search ",
+    };
     let search_input = Paragraph::new(state.search_text.to_owned())
         .block(
             Block::default()
-                .title("Search")
+                .title(search_title)
                 .borders(Borders::ALL)
                 .border_type(BorderType::Rounded),
         )
         .style(match state.mode {
-            InputMode::Search => Style::default().fg(Color::Yellow),
+            InputMode::Search(_) => Style::default().fg(Color::Yellow),
             _ => Style::default(),
         });
     f.render_widget(search_input, list_chunk[0]);

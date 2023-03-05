@@ -233,7 +233,7 @@ dependencies = [
 
 [[package]]
 name = "pobsd"
-version = "0.1.1"
+version = "0.1.3"
 dependencies = [
  "clap",
  "crossterm 0.26.1",
