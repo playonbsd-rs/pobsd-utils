@@ -85,7 +85,13 @@ impl AppState {
     }
     pub(crate) fn move_up(&mut self) {
         let len_list = match self.mode {
-            InputMode::Search(_) => self.search_list.len(),
+            InputMode::Search(_) => {
+                if self.search_list.is_empty() {
+                    self.games.len()
+                } else {
+                    self.search_list.len()
+                }
+            }
             _ => self.games.len(),
         };
         let selected = match self.list_state.selected() {
@@ -110,7 +116,13 @@ impl AppState {
     }
     pub(crate) fn move_down(&mut self) {
         let len_list = match self.mode {
-            InputMode::Search(_) => self.search_list.len(),
+            InputMode::Search(_) => {
+                if self.search_list.is_empty() {
+                    self.games.len()
+                } else {
+                    self.search_list.len()
+                }
+            }
             _ => self.games.len(),
         };
         let selected = match self.list_state.selected() {
