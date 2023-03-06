@@ -41,7 +41,7 @@ fn test_parsing_incorrect_database() {
         }
         ParserResult::WithError(games, lines) => (games, lines),
     };
-    assert_eq!(vec![19, 48], lines);
+    assert_eq!(vec![19, 48, 97], lines);
     // we get them all
     assert_eq!(games.len(), 9);
     // we get the right ones and in the right order

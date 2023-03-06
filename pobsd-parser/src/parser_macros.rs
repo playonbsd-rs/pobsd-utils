@@ -15,7 +15,10 @@ macro_rules! impl_parse {
                         self.games.push(game);
                         self.state = $firstnext;
                         },
-                    _ => self.state = ParserState::Recovering,
+                    _ => self.state = match self.state {
+                            $firststate => ParserState::Error,
+                            _ => ParserState::Recovering,
+                        }
                 },
                 $(
                 $state => match field {
