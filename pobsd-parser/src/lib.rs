@@ -12,3 +12,4 @@ pub(crate) mod split_line;
 pub use self::game::Game;
 pub use self::parser::Parser;
 pub use self::parser::ParserResult;
+pub use self::parser::ParsingMode;
