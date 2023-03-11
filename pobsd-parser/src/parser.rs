@@ -56,12 +56,12 @@ enum ParserState {
     Status,
     Added,
     Updated,
+    IgdbId,
     Error,
     Recovering,
 }
 
 pub enum ParsingMode {
-    #[allow(dead_code)]
     Strict,
     Relaxed,
 }
@@ -153,6 +153,7 @@ impl Parser {
          (ParserState::Version, Field::Version, version, ParserState::Status);
          (ParserState::Status, Field::Status, status, ParserState::Added);
          (ParserState::Added, Field::Added, added, ParserState::Updated);
-         (ParserState::Updated, Field::Updated, updated, ParserState::Game)
+         (ParserState::Updated, Field::Updated, updated, ParserState::IgdbId);
+         (ParserState::IgdbId, Field::IgdbId, igdb_id, ParserState::Game)
     ];
 }

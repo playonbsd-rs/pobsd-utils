@@ -76,7 +76,7 @@ fn test_parser_returned_lines_with_error_with_faulty_database_relaxed_mode() {
         }
         ParserResult::WithError(games, lines) => (games, lines),
     };
-    assert_eq!(vec![19, 48, 97], lines);
+    assert_eq!(vec![20, 51, 97], lines);
 }
 #[test]
 fn test_parser_returned_lines_with_error_with_faulty_database_strict_mode() {
@@ -90,7 +90,7 @@ fn test_parser_returned_lines_with_error_with_faulty_database_strict_mode() {
         }
         ParserResult::WithError(games, lines) => (games, lines),
     };
-    assert_eq!(vec![19], lines);
+    assert_eq!(vec![20], lines);
 }
 #[test]
 fn test_parser_right_number_of_games_with_correct_database_relaxed_mode() {

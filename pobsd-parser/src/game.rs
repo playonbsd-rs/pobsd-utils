@@ -62,6 +62,7 @@ pub struct Game {
     pub added: Option<String>,
     /// When updated
     pub updated: Option<String>,
+    pub igdb_id: Option<String>,
 }
 
 impl<'a> Game {
@@ -169,9 +170,13 @@ impl fmt::Display for Game {
             Some(updated) => format!("Updated\t{}", updated),
             None => "Updated".to_string(),
         };
+        let igdb_id = match &self.igdb_id {
+            Some(runtime) => format!("IgdbId\t{}", runtime),
+            None => "IgdbId".to_string(),
+        };
         write!(
             f,
-            "{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}",
+            "{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}\n{}",
             game,
             cover,
             engine,
@@ -188,6 +193,7 @@ impl fmt::Display for Game {
             status,
             added,
             updated,
+            igdb_id,
         )
     }
 }
@@ -282,7 +288,8 @@ Pub
 Version
 Status
 Added
-Updated";
+Updated
+IgdbId";
         let game = Game {
             name: "AaaaaAAaaaAAAaaAAAAaAAAAA!!! for the Awesome".to_string(),
             cover: Some("AaaaaA_for_the_Awesome_Cover.jpg".to_string()),
@@ -303,6 +310,7 @@ Updated";
             status: None,
             added: None,
             updated: None,
+            igdb_id: None,
         };
         assert_eq!(format!("{}", game), game_str);
     }

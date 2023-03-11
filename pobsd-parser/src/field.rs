@@ -45,6 +45,8 @@ pub enum Field {
     Added(Option<String>),
     /// When the game was last updated
     Updated(Option<String>),
+    /// The id of the game in the IGDB database
+    IgdbId(Option<String>),
     /// Store the result of a unknown line of the database
     /// The left hand side and the right hand side (if
     /// any) are stores separately.
@@ -117,6 +119,10 @@ impl fmt::Display for Field {
             Field::Updated(name) => match name {
                 Some(name) => write!(f, "Updated\t{}", name),
                 None => write!(f, "Updated"),
+            },
+            Field::IgdbId(name) => match name {
+                Some(name) => write!(f, "IgdbId\t{}", name),
+                None => write!(f, "IgdbId"),
             },
             Field::Unknown(field) => match field {
                 Some(field) => {
@@ -221,6 +227,10 @@ impl Field {
                 "Updated" => match right {
                     Some(right) => Field::Updated(Some(right.into())),
                     None => Field::Updated(None),
+                },
+                "IgdbId" => match right {
+                    Some(right) => Field::IgdbId(Some(right.into())),
+                    None => Field::IgdbId(None),
                 },
                 _ => Field::Unknown(Some(left.into())),
             }
@@ -412,5 +422,16 @@ mod field_tests {
         let field = Field::from(&input);
         assert_eq!(Field::Unknown(Some("Let's not".into())), field);
         assert_eq!(format!("{}", field), format!("Unknown field {}", input));
+    }
+    #[test]
+    fn test_from_igdb_id_line() {
+        let input = "IgdbId\t12";
+        let field = Field::from(&input);
+        assert_eq!(Field::IgdbId(Some("12".into())), field);
+        assert_eq!(format!("{}", field), input);
+        let input = "IgdbId";
+        let field = Field::from(&input);
+        assert_eq!(Field::IgdbId(None), field);
+        assert_eq!(format!("{}", field), input);
     }
 }

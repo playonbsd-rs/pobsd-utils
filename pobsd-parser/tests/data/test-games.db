@@ -14,6 +14,7 @@ Version
 Status
 Added	1970-01-01
 Updated	1970-01-01
+IgdbId	12
 Game	The Adventures of Mr. Hat
 Cover
 Engine	godot
@@ -30,6 +31,7 @@ Version	Early Access
 Status	runs (2022-05-13)
 Added	2022-05-13
 Updated	2022-05-13
+IgdbId	13
 Game	The Adventures of Shuggy
 Cover	Adventures_of_Shuggy_The_-_cover.png
 Engine	FNA
@@ -46,6 +48,7 @@ Version
 Status
 Added	1970-01-01
 Updated	1970-01-01
+IgdbId	1212
 Game	Aedemphia
 Cover	aedemphia.png
 Engine	RPG Maker
@@ -62,6 +65,7 @@ Version
 Status
 Added	1970-01-01
 Updated	1970-01-01
+IgdbId	1215415
 Game	Aeternum
 Cover
 Engine	FNA
@@ -78,6 +82,7 @@ Version
 Status	runs (2021-11-27)
 Added	2021-11-27
 Updated	2021-11-28
+IgdbId	12155
 Game	Airships: Conquer the Skies
 Cover	Airships_ConquerTheSkies_logo.jpg
 Engine	lwjgl
@@ -94,6 +99,7 @@ Version
 Status	works with some setup steps required
 Added	1970-01-01
 Updated	1970-01-01
+IgdbId	1255
 Game	Akane the Kunoichi
 Cover	Akane_the_Kunoichi_cover.jpg
 Engine	XNA
@@ -110,6 +116,7 @@ Version
 Status
 Added	1970-01-01
 Updated	1970-01-01
+IgdbId	1255152121
 Game	Alien Shepherd
 Cover
 Engine	HashLink
@@ -126,6 +133,7 @@ Version	1.0.1
 Status	runs with bugs - graphics artefacts (2023-01-04)
 Added	2022-06-11
 Updated	2023-01-04
+IgdbId	125515211
 Game	Always Sometimes Monsters
 Cover	Always_Sometimes_Monsters.jpg
 Engine	NW.js
@@ -142,3 +150,4 @@ Version
 Status	manual setup needed
 Added	1970-01-01
 Updated	1970-01-01
+IgdbId	1255211
