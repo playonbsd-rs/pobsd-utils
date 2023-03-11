@@ -1,12 +1,14 @@
 use pobsd_parser::Game;
 use tui::widgets::ListState;
 
+#[derive(Debug, PartialEq)]
 pub(crate) enum SearchMode {
     Name,
     Tag,
     Genre,
 }
 
+#[derive(Debug, PartialEq)]
 pub(crate) enum InputMode {
     Normal,
     Search(SearchMode),
@@ -144,5 +146,44 @@ impl AppState {
             }
         };
         self.list_state.select(selected);
+    }
+}
+#[cfg(test)]
+mod test_app_states {
+    use super::*;
+    use pobsd_parser::Game;
+    fn get_games() -> Vec<Game> {
+        let mut games: Vec<Game> = Vec::new();
+        let params = vec![
+            ("AAa", "GenreA", "TagA"),
+            ("Bbb", "GenreB", "TagB"),
+            ("Ccc", "GenreC", "TagC"),
+        ];
+        for (name, genres, tags) in params {
+            let mut game = Game::default();
+            game.name = name.into();
+            game.genres = Some(vec![genres.split(',').map(|a| a.trim()).collect()]);
+            game.tags = Some(vec![tags.split(',').map(|a| a.trim()).collect()]);
+            games.push(game)
+        }
+        games
+    }
+    #[test]
+    fn test_app_state_change_mode_method() {
+        let mut app_state = AppState::new();
+        assert_eq!(app_state.mode, InputMode::Normal);
+        app_state.change_mode(InputMode::Search(SearchMode::Name));
+        assert_eq!(app_state.mode, InputMode::Search(SearchMode::Name));
+    }
+    #[test]
+    fn test_app_state_search_method_in_name_mode() {
+        let games = get_games();
+        let mut app_state = AppState::new();
+        app_state.mode = InputMode::Search(SearchMode::Name);
+        app_state.games = games.clone();
+        app_state.search_text = "Aaa".into();
+        app_state.search();
+        assert_eq!(app_state.search_list[0], games[0]);
+        assert_eq!(app_state.search_list.len(), 1);
     }
 }
