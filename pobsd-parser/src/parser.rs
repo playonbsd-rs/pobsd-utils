@@ -31,7 +31,9 @@
 //!
 //! The [`Parser::load_from_file`] method returns [`Result`]<[`ParserResult`], [`std::io::Error`]>.
 //!
+use hash32::{FnvHasher, Hasher};
 use std::fs;
+use std::hash::Hash;
 use std::path::Path;
 
 use super::field::Field;
@@ -132,6 +134,12 @@ impl Parser {
                     break;
                 }
             };
+        }
+        for game in &mut self.games {
+            let mut fnv = FnvHasher::default();
+            game.added.hash(&mut fnv);
+            game.name.hash(&mut fnv);
+            game.uid = fnv.finish32();
         }
         match self.error_lines.is_empty() {
             false => ParserResult::WithError(self.games, self.error_lines),

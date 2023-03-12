@@ -29,6 +29,8 @@ use std::fmt;
 
 #[derive(Serialize, Clone, Default, Debug, PartialEq, Eq)]
 pub struct Game {
+    /// An unique identifier generated from the name and added fields
+    pub uid: u32,
     /// The name of the game.
     pub name: String,
     /// The cover of the game.
@@ -81,10 +83,6 @@ impl<'a> Game {
     }
 }
 
-/// For now games are ordered by id.
-/// This will probably be dropped in the
-/// future in favor of alphabetical ordering
-/// on the name.
 impl PartialOrd for Game {
     fn partial_cmp(&self, other: &Game) -> Option<Ordering> {
         self.get_ordering_name()
@@ -101,6 +99,12 @@ impl PartialOrd for Game {
     }
     fn ge(&self, other: &Game) -> bool {
         self.get_ordering_name().ge(&other.get_ordering_name())
+    }
+}
+
+impl Ord for Game {
+    fn cmp(&self, other: &Game) -> Ordering {
+        self.get_ordering_name().cmp(&other.get_ordering_name())
     }
 }
 
@@ -208,6 +212,7 @@ mod game_tests {
         let tags: Vec<String> = vec!["tag1".to_string(), "tag2".to_string()];
         let genres: Vec<String> = vec!["genre1".to_string(), "genre2".to_string()];
         let stores: Vec<String> = vec!["store1".to_string(), "store2".to_string()];
+        game.uid = 1221;
         game.name = "game name".to_string();
         game.cover = Some("cover.jpg".to_string());
         game.engine = Some("game engine".to_string());
@@ -291,6 +296,7 @@ Added
 Updated
 IgdbId";
         let game = Game {
+            uid: 12,
             name: "AaaaaAAaaaAAAaaAAAAaAAAAA!!! for the Awesome".to_string(),
             cover: Some("AaaaaA_for_the_Awesome_Cover.jpg".to_string()),
             engine: None,
