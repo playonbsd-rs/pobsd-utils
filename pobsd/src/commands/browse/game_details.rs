@@ -83,12 +83,11 @@ pub fn display_game(game: &Game) -> (Paragraph, Paragraph, Paragraph) {
 }
 
 fn format_single<'a>(name: String, data: String) -> Spans<'a> {
-    let text = Spans::from(vec![
+    Spans::from(vec![
         Span::styled(name, Style::default().add_modifier(Modifier::BOLD)),
         Span::raw(": "),
         Span::raw(data),
-    ]);
-    text
+    ])
 }
 
 fn format_mutiple<'a>(data: (String, Vec<String>)) -> Vec<Spans<'a>> {
