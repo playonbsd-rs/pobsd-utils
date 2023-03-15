@@ -2,35 +2,6 @@
 //! the [PlayOnBSD Database](https://github.com/playonbsd/OpenBSD-Games-Database)
 //! (either provided as a string or as a file) into a vector of [`Game`] objects.
 //!
-//! # Parser
-//! A new parser can be create using the [`Parser::new`] method and proving
-//! a [`ParsingMode`] enum as only argument.
-//! The parsing supports two modes representend by the two variants of the
-//! [`ParsingMode`] enum:
-//! * **strict mode** ([`ParsingMode::Strict`]) in which the parsing
-//!  will stop if a parsing error occurs returning the games processed
-//! before the error as well as the line in the input (file or string)
-//! where the error occured;
-//! * **relaxed mode** ([`ParsingMode::Relaxed`]) where the parsing
-//! will continue even after an error is encountered, the parsing
-//! resuming when reaching the next game after the parsing error
-//! ; it returns all the games that have been parsed as well as
-//! the lines that were ignored due to parsing errors.
-//!
-//! The database can be provided as a string using the [`Parser::load_from_string`] method
-//! or as a file using the [`Parser::load_from_file`] method.
-//!
-//! ### Returned value
-//! The returned value depend on the method used to parse the PlayOnBSD database.
-//!
-//! The [`Parser::load_from_string`] method returns an [`ParserResult`] enum. It has to variants:
-//! * [`ParserResult::WithoutError`] holding a vector of [`Game`] object;
-//! * [`ParserResult::WithError`] holding a vector of [`Game`] objects as well as
-//! a vector of [`usize`] where each element is the number of a line ignored during parsing
-//! due to parsing errors.
-//!
-//! The [`Parser::load_from_file`] method returns [`Result`]<[`ParserResult`], [`std::io::Error`]>.
-//!
 use hash32::{FnvHasher, Hasher};
 use std::fs;
 use std::hash::Hash;
@@ -63,11 +34,30 @@ enum ParserState {
     Recovering,
 }
 
+/// The [`ParsingMode`] enum is used to represent the two parsing modes
+/// supported by [`Parser`]:
+/// * a **strict mode** in which the parsing
+///  will stop if a parsing error occurs returning the games processed
+/// before the error as well as the line in the input (file or string)
+/// where the error occured;
+/// * a **relaxed mode** in which the parsing
+/// will continue even after an error is encountered, the parsing
+/// resuming when reaching the next game after the parsing error
+/// ; it returns all the games that have been parsed as well as
+/// the lines that were ignored due to parsing errors.
 pub enum ParsingMode {
     Strict,
     Relaxed,
 }
 
+/// Represent the result of the parsing.
+///
+/// If there is no error, the [`ParserResult::WithoutError`] variant
+/// is returned holding a vector of the games in the database. If there
+/// is at least one error, the [`ParserResult::WithError`] variant is
+/// returned holding a vector of the games in the database and a vector
+/// of the lines where errors occured. If in strict mode only the games
+/// parsed before the error occured will be returned.
 pub enum ParserResult {
     WithError(Vec<Game>, Vec<usize>),
     WithoutError(Vec<Game>),
@@ -81,7 +71,8 @@ impl From<ParserResult> for Vec<Game> {
         }
     }
 }
-
+/// Parser provides a parser that can be created using the [`Parser::new`] method
+/// which takes a [`ParsingMode`] enum as only argument.
 pub struct Parser {
     state: ParserState,
     games: Vec<Game>,
@@ -102,7 +93,7 @@ impl Default for Parser {
     }
 }
 impl Parser {
-    #[allow(dead_code)]
+    /// Crate a parser with a given parsing mode
     pub fn new(mode: ParsingMode) -> Self {
         Self {
             state: ParserState::Game,
@@ -112,6 +103,7 @@ impl Parser {
             mode,
         }
     }
+    /// Load the database from a file.
     pub fn load_from_file(self, file: impl AsRef<Path>) -> Result<ParserResult, std::io::Error> {
         let file: &Path = file.as_ref();
         if file.is_file() {
@@ -124,6 +116,7 @@ impl Parser {
             ))
         }
     }
+    /// Load the database from a string.
     pub fn load_from_string(mut self, data: &str) -> ParserResult {
         for line in data.lines() {
             self.current_line += 1;

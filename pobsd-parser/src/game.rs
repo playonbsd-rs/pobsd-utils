@@ -1,32 +1,34 @@
-//! # Game
-//! pobsdrs-parser provides a [`Game`] struct representing a
-//! game from the database with an additional [`Game::id`] field which
-//!  represents the position in the database.
-//!
-//! The name of some fields differs from the one used
-//! in the database itself: Genre and Store are plural
-//! since there can be more than one item for each
-//! and Pub translate to publi since pub is a reserved
-//! keyword in Rust.
-//!
-//! All fields are optional strings or vectors of strings
-//! except for the name of the game which is mandatory.
-//! The parser does not try to be smart with dates and
-//! just store them as string.
-//!
-//! ### Display
-//! The [`Game`] struct implement the [`core::fmt::Display`] trait
-//! and will be displayed as it would appear in the
-//! PlayOnBSD database.
-//!
-//! ### PartialOrd
-//! The [`Game`] struct implements the [`core::cmp::PartialOrd`] trait
-//! and [`Game`] objects are ordered according to their
-//! [`Game::id`] which correspond to the game position in
-//! the PlayOnBSD database.
 use std::cmp::{Ordering, PartialOrd};
 use std::fmt;
 
+/// Represents a game from the database.
+///
+/// It also includes an additional [`Game::uid`] field
+/// derived from the name of the game as well as the date to
+/// which the game was added to the database. It therefore
+/// provides an unique identifier under the assumption that no
+/// game with the same name will be added the same dat into
+/// the databas.
+///
+/// The name of some fields differs from the one used
+/// in the database itself: Genre and Store are plural
+/// since there can be more than one item for each
+/// and Pub translate to publi since pub is a reserved
+/// keyword in Rust.
+///
+/// All fields are optional strings or vectors of strings
+/// except for the name of the game which is mandatory.
+/// The parser does not try to be smart with dates and
+/// just store them as string.
+///
+/// ### Display
+/// The [`Game`] struct implement the [`core::fmt::Display`] trait
+/// and will be displayed as it would appear in the
+/// PlayOnBSD database.
+///
+/// ### PartialOrd
+/// The [`Game`] struct implements the [`core::cmp::PartialOrd`] trait
+/// and [`Game`] objects are ordered according to their name (without The or A).
 #[derive(Serialize, Clone, Default, Debug, PartialEq, Eq)]
 pub struct Game {
     /// An unique identifier generated from the name and added fields
@@ -64,6 +66,7 @@ pub struct Game {
     pub added: Option<String>,
     /// When updated
     pub updated: Option<String>,
+    /// The IGDB Id of the game
     pub igdb_id: Option<String>,
 }
 
