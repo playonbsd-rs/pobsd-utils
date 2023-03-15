@@ -2,7 +2,7 @@
 name = "pobsd-parser"
 description = "Simplistic parser for the PlayOnBSD Database"
 authors = ["Hukadan <me@hukadan.org>"]
-version = "0.1.1"
+version = "0.2.0"
 edition = "2021"
 homepage = "https://github.com/Hukadan/pobsd-rs"
 documentation = "https://docs.rs/pobsd-parser"
