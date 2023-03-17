@@ -135,30 +135,33 @@ mod game_tests {
     fn test_database_get_all_tags() {
         let db = GameDataBase::new(create_games());
         let mut tags = db.get_all_tags();
-        tags.sort();
-        assert_eq!(tags, vec![&"Tag1".to_string(), &"Tag2".to_string()])
+        tags.items.sort();
+        assert_eq!(tags.items, vec![&"Tag1".to_string(), &"Tag2".to_string()])
     }
     #[test]
     fn test_database_get_all_genres() {
         let db = GameDataBase::new(create_games());
         let mut genres = db.get_all_genres();
-        genres.sort();
-        assert_eq!(genres, vec![&"Genre1".to_string(), &"Genre2".to_string()])
+        genres.items.sort();
+        assert_eq!(
+            genres.items,
+            vec![&"Genre1".to_string(), &"Genre2".to_string()]
+        )
     }
     #[test]
     fn test_database_get_all_years() {
         let db = GameDataBase::new(create_games());
         let mut years = db.get_all_years();
-        years.sort();
-        assert_eq!(years, vec![&"2011".to_string()])
+        years.items.sort();
+        assert_eq!(years.items, vec![&"2011".to_string()])
     }
     #[test]
     fn test_database_get_all_runtimes() {
         let db = GameDataBase::new(create_games());
         let mut runtimes = db.get_all_runtimes();
-        runtimes.sort();
+        runtimes.items.sort();
         assert_eq!(
-            runtimes,
+            runtimes.items,
             vec![&"Runtime1".to_string(), &"Runtime2".to_string()]
         )
     }
@@ -166,23 +169,23 @@ mod game_tests {
     fn test_database_get_all_publis() {
         let db = GameDataBase::new(create_games());
         let mut publis = db.get_all_publis();
-        publis.sort();
-        assert_eq!(publis, vec![&"Pub1".to_string(), &"Pub2".to_string()])
+        publis.items.sort();
+        assert_eq!(publis.items, vec![&"Pub1".to_string(), &"Pub2".to_string()])
     }
     #[test]
     fn test_database_get_all_devs() {
         let db = GameDataBase::new(create_games());
         let mut devs = db.get_all_devs();
-        devs.sort();
-        assert_eq!(devs, vec![&"Dev1".to_string(), &"Dev2".to_string()])
+        devs.items.sort();
+        assert_eq!(devs.items, vec![&"Dev1".to_string(), &"Dev2".to_string()])
     }
     #[test]
     fn test_database_get_all_games() {
         let games_origin = create_games();
         let db = GameDataBase::new(create_games());
         let mut games = db.get_all_games();
-        games.sort();
-        assert_eq!(games[0], &games_origin[0]);
-        assert_eq!(games[1], &games_origin[1]);
+        games.items.sort();
+        assert_eq!(games.items[0], &games_origin[0]);
+        assert_eq!(games.items[1], &games_origin[1]);
     }
 }

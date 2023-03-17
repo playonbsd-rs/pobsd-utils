@@ -1,3 +1,4 @@
+use crate::query_result::QueryResult;
 use paste::paste;
 use pobsd_parser::Game;
 
@@ -10,7 +11,7 @@ macro_rules! get_game_by {
         }
     };
     (ids) => {
-        pub fn get_game_by_ids(&self, game_ids: Vec<u32>) -> Vec<&Game> {
+        pub fn get_game_by_ids(&self, game_ids: Vec<u32>) -> QueryResult<&Game> {
             let mut games: Vec<&Game> = Vec::new();
             for game_id in game_ids {
                 if let Some(game) = self.get_game_by_id(game_id) {
@@ -18,12 +19,12 @@ macro_rules! get_game_by {
                 }
             }
             games.sort();
-            games
+            QueryResult { items: games }
         }
     };
     ($field:ident) => {
         paste! {
-            pub fn [<get_game_by_ $field>](&self, field: &str) -> Vec<&Game> {
+            pub fn [<get_game_by_ $field>](&self, field: &str) -> QueryResult<&Game> {
                 match self.[<$field s>].get(field) {
                     Some(game_ids) => {
                         let mut games: Vec<&Game> = Vec::new();
@@ -33,9 +34,9 @@ macro_rules! get_game_by {
                             }
                         }
                         games.sort();
-                        games
+                        QueryResult{ items: games}
                     }
-                    None => vec![],
+                    None => QueryResult{ items : vec![]},
                 }
             }
         }
@@ -43,18 +44,18 @@ macro_rules! get_game_by {
 }
 macro_rules! get_all {
     (games) => {
-        pub fn get_all_games(&self) -> Vec<&Game> {
+        pub fn get_all_games(&self) -> QueryResult<&Game> {
             let mut games: Vec<&Game> = self.games.values().collect();
             games.sort();
-            games
+            QueryResult { items: games }
         }
     };
     ($field:ident) => {
         paste! {
-            pub fn [<get_all_ $field>](&self) -> Vec<&String> {
+            pub fn [<get_all_ $field>](&self) -> QueryResult<&String> {
                 let mut items: Vec<&String> = self.$field.keys().collect();
                 items.sort();
-                items
+                QueryResult{items}
             }
         }
     };
