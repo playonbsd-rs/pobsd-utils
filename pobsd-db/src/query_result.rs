@@ -1,15 +1,16 @@
+use crate::Item;
 use paste::paste;
 use pobsd_parser::Game;
 
 macro_rules! get_game_by {
     ($field:ident) => {
         paste! {
-            pub fn [<get_game_by_ $field>](self, field: &str) -> QueryResult<T> {
-                let mut items: Vec<T> = self
+            pub fn [<get_game_by_ $field>](self, field: &str) -> QueryResult<&'a Game> {
+                let mut items: Vec<&Game> = self
                     .items
                     .clone()
                     .into_iter()
-                    .filter(|a| a.[<get_ $field>]().eq(&Some(field.to_string())))
+                    .filter(|a| a.$field.eq(&Some(field.to_string())))
                     .collect();
                 items.sort();
                 QueryResult{items}
@@ -18,12 +19,12 @@ macro_rules! get_game_by {
     };
     (array $field:ident) => {
         paste! {
-            pub fn [<get_game_by_ $field>](self, field: &str) -> QueryResult<T> {
-                let mut items: Vec<T> = self
+            pub fn [<get_game_by_ $field>](self, field: &str) -> QueryResult<&'a Game> {
+                let mut items: Vec<&Game> = self
                     .items
                     .clone()
                     .into_iter()
-                    .filter(|a| match a.[<get_ $field>]() {
+                    .filter(|a| match &a.$field {
                         Some(items) => items.contains(&field.to_string()),
                         None => false,
                     })
@@ -35,85 +36,38 @@ macro_rules! get_game_by {
     };
 }
 
-pub trait Item {
-    fn get_name(&self) -> &str;
-}
-
-impl Item for &Game {
-    fn get_name(&self) -> &str {
-        &self.name
-    }
-}
-
-impl Item for &String {
-    fn get_name(&self) -> &str {
-        &self
-    }
-}
-
-pub trait GameItem: Item {
-    fn get_uid(&self) -> u32;
-    fn get_runtime(&self) -> &Option<String>;
-    fn get_year(&self) -> &Option<String>;
-    fn get_dev(&self) -> &Option<String>;
-    fn get_publi(&self) -> &Option<String>;
-    fn get_engine(&self) -> &Option<String>;
-    fn get_genres(&self) -> &Option<Vec<String>>;
-    fn get_tags(&self) -> &Option<Vec<String>>;
-}
-
-impl GameItem for &Game {
-    fn get_uid(&self) -> u32 {
-        self.uid
-    }
-    fn get_runtime(&self) -> &Option<String> {
-        &self.runtime
-    }
-    fn get_year(&self) -> &Option<String> {
-        &self.year
-    }
-    fn get_dev(&self) -> &Option<String> {
-        &self.dev
-    }
-    fn get_publi(&self) -> &Option<String> {
-        &self.publi
-    }
-    fn get_genres(&self) -> &Option<Vec<String>> {
-        &self.genres
-    }
-    fn get_tags(&self) -> &Option<Vec<String>> {
-        &self.genres
-    }
-    fn get_engine(&self) -> &Option<String> {
-        &self.engine
-    }
-}
-
-pub struct QueryResult<T: Item + Clone> {
+pub struct QueryResult<T> {
     pub items: Vec<T>,
 }
 
-impl<T: Item + Clone> QueryResult<T> {
-    pub fn get_by_name(&self, name: &str) -> Option<T> {
-        let mut items: Vec<&T> = self
-            .items
-            .iter()
-            .filter(|a| a.get_name().eq(name))
-            .collect();
+impl QueryResult<Item> {
+    pub fn get_item_by_name(&self, name: &str) -> Option<Item> {
+        let mut items: Vec<&Item> = self.items.iter().filter(|a| a.eq(&name)).collect();
         items.pop().cloned()
     }
-    pub fn search_by_name(self, name: &str) -> QueryResult<T> {
-        let items: Vec<T> = self
+    pub fn search_item_by_name(self, name: &str) -> QueryResult<Item> {
+        let items: Vec<Item> = self
             .items
-            .clone()
             .into_iter()
-            .filter(|a| a.get_name().contains(name))
+            .filter(|a| a.contains(name))
             .collect();
         QueryResult { items }
     }
 }
 
-impl<T: GameItem + Clone + Ord> QueryResult<T> {
+impl<'a> QueryResult<&'a Game> {
+    pub fn get_game_by_name(self, name: &str) -> Option<&'a Game> {
+        let mut items: Vec<&Game> = self.items.into_iter().filter(|a| a.name.eq(name)).collect();
+        items.pop()
+    }
+    pub fn search_game_by_name(self, name: &str) -> QueryResult<&'a Game> {
+        let items: Vec<&Game> = self
+            .items
+            .into_iter()
+            .filter(|a| a.name.contains(name))
+            .collect();
+        QueryResult { items }
+    }
     get_game_by!(runtime);
     get_game_by!(year);
     get_game_by!(dev);
