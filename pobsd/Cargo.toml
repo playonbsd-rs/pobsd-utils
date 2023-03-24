@@ -1,6 +1,6 @@
 [package]
 name = "pobsd"
-description = "Simple tool to interact with the PlayOnBSD database"
+description = "Simple TUI to browse the PlayOnBSD database"
 version = "0.2.0"
 edition = "2021"
 authors = ["Hukadan <me@hukadan.org>"]

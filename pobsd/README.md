@@ -2,7 +2,7 @@
 [![rust-clippy analyze](https://github.com/Hukadan/pobsd-rs/actions/workflows/rust-clippy.yml/badge.svg)](https://github.com/Hukadan/pobsd-rs/actions/workflows/rust-clippy.yml)
 
 ## pobsd
-pobsd is a tool written in Rust designed to browse the PlayOnBSD
+pobsd is a TUI written in Rust designed to browse the PlayOnBSD
 database that can be find [here](https://github.com/playonbsd/OpenBSD-Games-Database)
 
 It makes use of both `plege(2)` and `unveil(2)`.
