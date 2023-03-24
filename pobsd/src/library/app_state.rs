@@ -1,5 +1,11 @@
+use crossterm::event::{Event, Event::Key, KeyCode};
 use pobsd_parser::Game;
 use tui::widgets::ListState;
+
+pub(crate) enum AppStatus {
+    Continue,
+    Close,
+}
 
 #[derive(Debug, PartialEq)]
 pub(crate) enum SearchMode {
@@ -31,6 +37,55 @@ impl AppState {
             search_text: String::new(),
             search_list: vec![],
         }
+    }
+    pub(crate) fn event_handler(&mut self, event: Event) -> AppStatus {
+        if let Key(key) = event {
+            match &self.mode {
+                InputMode::Normal => match key.code {
+                    KeyCode::Char('q') => return AppStatus::Close,
+                    KeyCode::Char('s') => {
+                        self.change_mode(InputMode::Search(SearchMode::Name));
+                        self.list_state.select(None);
+                    }
+                    KeyCode::Up | KeyCode::Char('k') => self.move_up(),
+                    KeyCode::Down | KeyCode::Char('j') => self.move_down(),
+                    _ => {}
+                },
+                InputMode::Search(search_mode) => match key.code {
+                    KeyCode::Esc => {
+                        self.change_mode(InputMode::Normal);
+                        self.search_text.clear();
+                        self.list_state.select(None);
+                    }
+                    KeyCode::Char(c) => {
+                        self.search_text.push(c);
+                        self.search();
+                    }
+                    KeyCode::Backspace => {
+                        self.search_text.pop();
+                        self.search();
+                    }
+                    KeyCode::Tab => {
+                        match search_mode {
+                            SearchMode::Name => {
+                                self.change_mode(InputMode::Search(SearchMode::Tag))
+                            }
+                            SearchMode::Tag => {
+                                self.change_mode(InputMode::Search(SearchMode::Genre))
+                            }
+                            SearchMode::Genre => {
+                                self.change_mode(InputMode::Search(SearchMode::Name))
+                            }
+                        }
+                        self.search();
+                    }
+                    KeyCode::Up => self.move_up(),
+                    KeyCode::Down => self.move_down(),
+                    _ => {}
+                },
+            }
+        }
+        AppStatus::Continue
     }
     pub(crate) fn change_mode(&mut self, mode: InputMode) {
         self.mode = mode;

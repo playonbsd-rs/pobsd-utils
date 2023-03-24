@@ -3,15 +3,6 @@ use tui::text::{Span, Spans};
 use tui::widgets::{Block, BorderType, Borders, Paragraph};
 
 use pobsd_parser::Game;
-/*
-pub struct GameDetails<'a> {
-    game: &'a Game,
-}
-impl<'a> GameDetails<'a> {
-    pub fn new(game: &'a Game) -> Self {
-        Self { game }
-    }
-*/
 
 pub fn display_game(game: &Game) -> (Paragraph, Paragraph, Paragraph) {
     let mut res: Vec<Spans> = Vec::new();
