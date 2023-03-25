@@ -96,6 +96,7 @@ pub(crate) mod field;
 pub mod game;
 pub mod parser;
 pub(crate) mod split_line;
+pub mod store_links;
 
 pub use self::game::Game;
 pub use self::parser::Parser;

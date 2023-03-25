@@ -1,3 +1,4 @@
+use crate::store_links::StoreLinks;
 use std::cmp::{Ordering, PartialOrd};
 use std::fmt;
 
@@ -44,7 +45,7 @@ pub struct Game {
     /// The executable in the package.
     pub runtime: Option<String>,
     /// A vector with store urls.
-    pub stores: Option<Vec<String>>,
+    pub stores: Option<StoreLinks>,
     /// Hints (as the name imply).
     pub hints: Option<String>,
     /// A vector of genres associated with the game.
@@ -134,7 +135,15 @@ impl fmt::Display for Game {
             None => "Runtime".to_string(),
         };
         let stores = match &self.stores {
-            Some(stores) => format!("Store\t{}", stores.join(" ")),
+            Some(stores) => format!(
+                "Store\t{}",
+                stores
+                    .inner_ref()
+                    .into_iter()
+                    .map(|a| a.url.to_string())
+                    .collect::<Vec<String>>()
+                    .join(" ")
+            ),
             None => "Store".to_string(),
         };
         let hints = match &self.hints {
@@ -209,12 +218,16 @@ impl fmt::Display for Game {
 
 #[cfg(test)]
 mod game_tests {
+    use crate::store_links::StoreLink;
+
     use super::*;
     fn create_game() -> Game {
         let mut game = Game::default();
         let tags: Vec<String> = vec!["tag1".to_string(), "tag2".to_string()];
         let genres: Vec<String> = vec!["genre1".to_string(), "genre2".to_string()];
         let stores: Vec<String> = vec!["store1".to_string(), "store2".to_string()];
+        let store_links: Vec<StoreLink> = stores.into_iter().map(|a| StoreLink::from(&a)).collect();
+        let stores = StoreLinks(store_links);
         game.uid = 1221;
         game.name = "game name".to_string();
         game.cover = Some("cover.jpg".to_string());
@@ -305,10 +318,9 @@ IgdbId";
             engine: None,
             setup: None,
             runtime: Some("HumblePlay".to_string()),
-            stores: Some(vec![
-                "https://www.humblebundle.com/store/aaaaaaaaaaaaaaaaaaaaaaaaa-for-the-awesome"
-                    .to_string(),
-            ]),
+            stores: Some(StoreLinks(vec![StoreLink::from(
+                "https://www.humblebundle.com/store/aaaaaaaaaaaaaaaaaaaaaaaaa-for-the-awesome",
+            )])),
             hints: Some("Demo on HumbleBundle store page".to_string()),
             genres: None,
             tags: None,

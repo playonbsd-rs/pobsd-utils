@@ -1,4 +1,5 @@
 use super::split_line::split_line;
+use crate::store_links::{StoreLink, StoreLinks};
 use std::fmt;
 
 /* ------------------------ FIELD ENUM -----------------------*/
@@ -32,7 +33,7 @@ pub enum Field {
     Status(Option<String>),
     /// Store the result of a Store line of the database
     /// Stores are stored in a vector
-    Store(Option<Vec<String>>),
+    Store(Option<StoreLinks>),
     /// Store the result of a Genre line of the database
     /// Genres are stored in a vector
     Genres(Option<Vec<String>>),
@@ -97,7 +98,16 @@ impl fmt::Display for Field {
                 None => write!(f, "Status"),
             },
             Field::Store(name) => match name {
-                Some(name) => write!(f, "Store\t{}", name.join(" ")),
+                Some(StoreLinks(name)) => {
+                    write!(
+                        f,
+                        "Store\t{}",
+                        name.iter()
+                            .map(|a| a.url.to_string())
+                            .collect::<Vec<String>>()
+                            .join(" ")
+                    )
+                }
                 None => write!(f, "Store"),
             },
             Field::Genres(name) => match name {
@@ -188,11 +198,12 @@ impl Field {
                 // Store does not use the same separator than Genre and Tags
                 "Store" => match right {
                     Some(right) => {
-                        let mut items: Vec<String> = Vec::new();
+                        let mut items: Vec<StoreLink> = Vec::new();
                         for item in right.split(' ') {
-                            items.push(item.trim().into());
+                            let store = StoreLink::from(item.trim());
+                            items.push(store);
                         }
-                        Field::Store(Some(items))
+                        Field::Store(Some(StoreLinks(items)))
                     }
                     None => Field::Store(None),
                 },
@@ -358,7 +369,10 @@ mod field_tests {
         let input = "Store\tfirst second";
         let field = Field::from(&input);
         assert_eq!(
-            Field::Store(Some(vec!["first".into(), "second".into()])),
+            Field::Store(Some(StoreLinks(vec![
+                StoreLink::from("first"),
+                StoreLink::from("second")
+            ]))),
             field
         );
         assert_eq!(format!("{}", field), input);
