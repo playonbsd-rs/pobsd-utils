@@ -1,7 +1,6 @@
 [![Build](https://github.com/playonbsd-rs/pobsd-utils/actions/workflows/rust.yml/badge.svg)](https://github.com/playonbsd-rs/pobsd-utils/actions/workflows/rust.yml)
 [![Clippy](https://github.com/playonbsd-rs/pobsd-utils/actions/workflows/rust-clippy.yml/badge.svg)](https://github.com/playonbsd-rs/pobsd-utils/actions/workflows/rust-clippy.yml)
 [![Crates.io (latest)](https://img.shields.io/crates/v/pobsd-utils?style=flat)](https://crates.io/crates/pobsd-utils)
-[![Docs.rs](https://img.shields.io/docsrs/pobsd-utils)](https://docs.rs/pobsd-utils)
 
 
 ## pobsd-utils
