@@ -1,5 +1,5 @@
-[![Rust](https://github.com/Hukadan/pobsd-rs/actions/workflows/rust.yml/badge.svg)](https://github.com/Hukadan/pobsd-rs/actions/workflows/rust.yml)
-[![rust-clippy analyze](https://github.com/Hukadan/pobsd-rs/actions/workflows/rust-clippy.yml/badge.svg)](https://github.com/Hukadan/pobsd-rs/actions/workflows/rust-clippy.yml)
+[![Build](https://github.com/playonbsd-rs/pobsd-utils/actions/workflows/rust.yml/badge.svg)](https://github.com/playonbsd-rs/pobsd-utils/actions/workflows/rust.yml)
+[![Clippy](https://github.com/playonbsd-rs/pobsd-utils/actions/workflows/rust-clippy.yml/badge.svg)](https://github.com/playonbsd-rs/pobsd-utils/actions/workflows/rust-clippy.yml)
 
 ## pobsd-utils
 pobsd-utils is a tool written in Rust designed to interact with the PlayOnBSD
