@@ -1,3 +1,6 @@
+//! Provides a representation of the query result returned when
+//! interogating the database. Query results are themselves queriable
+//! and return another query result.
 use crate::Item;
 use paste::paste;
 use pobsd_parser::Game;

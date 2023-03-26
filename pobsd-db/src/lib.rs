@@ -1,5 +1,8 @@
+//! This library provides a set of methods to interogate the PlayOnBSD
+//! database in a friendly manner, without having to deal with a SQL
+//! database.
 pub mod database;
-pub mod queries;
+pub(crate) mod queries;
 pub mod query_result;
 
 pub use database::GameDataBase;

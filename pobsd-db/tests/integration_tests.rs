@@ -53,3 +53,85 @@ fn test_get_by_engine() {
     let game = game_query.items.get(0).unwrap();
     assert_eq!(game.name, "The Adventures of Mr. Hat".to_string());
 }
+
+#[test]
+fn test_get_by_runtime() {
+    let db = get_db_strict();
+    let game_query = db.get_game_by_runtime("lwjgl");
+    assert_eq!(game_query.items.len(), 1);
+    let game = game_query.items.get(0).unwrap();
+    assert_eq!(game.name, "Airships: Conquer the Skies".to_string());
+}
+
+#[test]
+fn test_get_by_genre() {
+    let db = get_db_strict();
+    let game_query = db.get_game_by_genre("shmup");
+    assert_eq!(game_query.items.len(), 1);
+    let game = game_query.items.get(0).unwrap();
+    assert_eq!(game.name, "Aeternum".to_string());
+}
+
+#[test]
+fn test_get_by_dev() {
+    let db = get_db_strict();
+    let game_query = db.get_game_by_dev("Creaky Lantern Games");
+    assert_eq!(game_query.items.len(), 1);
+    let game = game_query.items.get(0).unwrap();
+    assert_eq!(game.name, "Aeternum".to_string());
+}
+
+#[test]
+fn test_get_by_publi() {
+    let db = get_db_strict();
+    let game_query = db.get_game_by_publi("Florent Espanet");
+    assert_eq!(game_query.items.len(), 1);
+    let game = game_query.items.get(0).unwrap();
+    assert_eq!(game.name, "Alien Shepherd".to_string());
+}
+
+#[test]
+fn test_get_all_tags() {
+    let db = get_db_strict();
+    let tag_query = db.get_all_tags();
+    assert_eq!(tag_query.items.len(), 6);
+    for tag in vec!["Tag1", "indie", "free", "manga", "bullethell", "anime"] {
+        assert!(tag_query.items.contains(&&tag.to_string()));
+    }
+}
+
+#[test]
+fn test_get_all_genres() {
+    let db = get_db_strict();
+    let tag_query = db.get_all_genres();
+    assert_eq!(tag_query.items.len(), 7);
+    for genre in vec![
+        "Genre1",
+        "Puzzle Platformer",
+        "RPG",
+        "shmup",
+        "RTS",
+        "Platformer",
+        "platformer",
+    ] {
+        assert!(tag_query.items.contains(&&genre.to_string()));
+    }
+}
+
+#[test]
+fn test_get_all_runtimes() {
+    let db = get_db_strict();
+    let tag_query = db.get_all_runtimes();
+    assert_eq!(tag_query.items.len(), 7);
+    for runtime in vec![
+        "godot",
+        "easyrpg",
+        "fnaify",
+        "lwjgl",
+        "HashLink",
+        "HTML5",
+        "HumblePlay",
+    ] {
+        assert!(tag_query.items.contains(&&runtime.to_string()));
+    }
+}
